@@ -6,11 +6,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +49,12 @@ public class SwipeBackLayout extends FrameLayout {
     private float mScrimOpacity;
 
     private int mScrimColor = DEFAULT_SCRIM_COLOR;
+
+    private Rect mChildRect = new Rect();
+
+    private Rect mLeftRect = new Rect();
+
+    private MotionEvent mCurEvent;
 
     public SwipeBackLayout(Context context) {
         this(context, null);
@@ -121,6 +127,7 @@ public class SwipeBackLayout extends FrameLayout {
         if (!mEnable) {
             return false;
         }
+        mCurEvent = MotionEvent.obtain(event);
         final int action = MotionEventCompat.getActionMasked(event);
         final View contentView = mContentView;
 
@@ -145,7 +152,7 @@ public class SwipeBackLayout extends FrameLayout {
         if (!mEnable) {
             return false;
         }
-
+        mCurEvent = MotionEvent.obtain(event);
         mLeftDragHelper.processTouchEvent(event);
         final int action = MotionEventCompat.getActionMasked(event);
         final View contentView = mContentView;
@@ -154,9 +161,7 @@ public class SwipeBackLayout extends FrameLayout {
             case MotionEvent.ACTION_DOWN:
                 break;
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                break;
-            }
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_MOVE:
                 break;
         }
@@ -222,7 +227,15 @@ public class SwipeBackLayout extends FrameLayout {
 
         @Override
         public boolean tryCaptureView(View view, int i) {
-            return view == mContentView;
+            final int x = (int) MotionEventCompat.getX(mCurEvent, i);
+            final int y = (int) MotionEventCompat.getY(mCurEvent, i);
+            mLeftRect.set(0, 0, getWidth() / 3, getHeight());
+            return mLeftRect.contains(x, y);
+        }
+
+        @Override
+        public int getViewHorizontalDragRange(View child) {
+            return 1;
         }
 
         @Override
