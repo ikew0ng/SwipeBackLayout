@@ -1,1 +1,1 @@
-include ':SwipeBackDemo', ':SwipeBackLayout'
+include ':library', ':samples'
