@@ -37,4 +37,8 @@ public class SwipeBackActivity extends FragmentActivity {
     public SwipeBackLayout getSwipeBackLayout() {
         return mSwipeBackLayout;
     }
+
+    public void setSwipeBackEnable(boolean enable) {
+        mSwipeBackLayout.setEnableGesture(enable);
+    }
 }
