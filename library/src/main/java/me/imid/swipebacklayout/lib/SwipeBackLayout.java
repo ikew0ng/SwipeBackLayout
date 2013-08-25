@@ -102,12 +102,39 @@ public class SwipeBackLayout extends FrameLayout {
 
     }
 
+    /**
+     * Set up contentView which will be moved by user gesture
+     * 
+     * @param view
+     */
     private void setContentView(View view) {
         mContentView = view;
     }
 
     public void setEnableGesture(boolean enable) {
         mEnable = enable;
+    }
+
+    /**
+     * Set a color to use for the scrim that obscures primary content while a
+     * drawer is open.
+     * 
+     * @param color Color to use in 0xAARRGGBB format.
+     */
+    public void setScrimColor(int color) {
+        mScrimColor = color;
+        invalidate();
+    }
+
+    /**
+     * Set the size of an edge. This is the range in pixels along the edges of
+     * this view that will actively detect edge touches or drags if edge
+     * tracking is enabled.
+     * 
+     * @param size The size of an edge in pixels
+     */
+    public void setEdgeSize(int size) {
+        mDragHelper.setEdgeSize(size);
     }
 
     public void setOnScrollListener(OnScrollListener listener) {
@@ -122,6 +149,10 @@ public class SwipeBackLayout extends FrameLayout {
      * Set a drawable used for edge shadow.
      * 
      * @param shadow Drawable to use
+     * @param edgeFlags Combination of edge flags describing the edge to set
+     * @see #EDGE_LEFT
+     * @see #EDGE_RIGHT
+     * @see #EDGE_BOTTOM
      */
     public void setShadow(Drawable shadow, int edgeFlag) {
         if ((edgeFlag & EDGE_LEFT) != 0) {
@@ -138,6 +169,10 @@ public class SwipeBackLayout extends FrameLayout {
      * Set a drawable used for edge shadow.
      * 
      * @param resId Resource of drawable to use
+     * @param edgeFlags Combination of edge flags describing the edge to set
+     * @see #EDGE_LEFT
+     * @see #EDGE_RIGHT
+     * @see #EDGE_BOTTOM
      */
     public void setShadow(int resId, int edgeFlag) {
         setShadow(getResources().getDrawable(resId), edgeFlag);
