@@ -13,6 +13,7 @@ Usage
 2. To enable SwipeBackLayout, you can simply make your `Activity` extend `SwipeBackActivity`:
 	* In `onCreate` method, `setContentView()` should be called as usual.
 	* You will have access to the `getSwipeBackLayout()` method so you can customize the `SwipeBackLayout`. 
+3. Make window translucent by adding `<item name="android:windowIsTranslucent">true</item>` to your theme.
 
 Simple Example
 ===
