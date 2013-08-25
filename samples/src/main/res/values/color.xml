@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- androidColor -->
+    <color name="androidColorA">#33B5E5</color>
+    <color name="androidColorB">#AA66CC</color>
+    <color name="androidColorC">#99CC00</color>
+    <color name="androidColorD">#FFBB33</color>
+    <color name="androidColorE">#FF4444</color>
+</resources>

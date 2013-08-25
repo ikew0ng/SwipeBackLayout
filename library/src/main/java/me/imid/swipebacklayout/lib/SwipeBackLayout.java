@@ -44,7 +44,7 @@ public class SwipeBackLayout extends FrameLayout {
      */
     public static final int EDGE_ALL = EDGE_LEFT | EDGE_RIGHT | EDGE_BOTTOM;
 
-    private int mEdgeFlag = EDGE_LEFT;
+    private int mEdgeFlag;
 
     private Activity mActivity;
 
@@ -84,22 +84,20 @@ public class SwipeBackLayout extends FrameLayout {
 
     public SwipeBackLayout(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.SwipeBackLayoutStyle);
-
-        final float density = getResources().getDisplayMetrics().density;
-        final float minVel = MIN_FLING_VELOCITY * density;
-
-        mDragHelper = ViewDragHelper.create(this, new ViewDragCallback());
-        mDragHelper.setEdgeTrackingEnabled(mEdgeFlag);
-        mDragHelper.setMinVelocity(minVel);
-
-        setShadow(R.drawable.shadow_left, EDGE_LEFT);
-        setShadow(R.drawable.shadow_right, EDGE_RIGHT);
-        setShadow(R.drawable.shadow_bottom, EDGE_BOTTOM);
     }
 
     public SwipeBackLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
+        final float density = getResources().getDisplayMetrics().density;
+        final float minVel = MIN_FLING_VELOCITY * density;
 
+        mDragHelper = ViewDragHelper.create(this, new ViewDragCallback());
+        mDragHelper.setMinVelocity(minVel);
+        setEdgeTrackingEnabled(EDGE_LEFT);
+
+        setShadow(R.drawable.shadow_left, EDGE_LEFT);
+        setShadow(R.drawable.shadow_right, EDGE_RIGHT);
+        setShadow(R.drawable.shadow_bottom, EDGE_BOTTOM);
     }
 
     /**
@@ -113,6 +111,25 @@ public class SwipeBackLayout extends FrameLayout {
 
     public void setEnableGesture(boolean enable) {
         mEnable = enable;
+    }
+
+    /**
+     * Enable edge tracking for the selected edges of the parent view. The
+     * callback's
+     * {@link me.imid.swipebacklayout.lib.ViewDragHelper.Callback#onEdgeTouched(int, int)}
+     * and
+     * {@link me.imid.swipebacklayout.lib.ViewDragHelper.Callback#onEdgeDragStarted(int, int)}
+     * methods will only be invoked for edges for which edge tracking has been
+     * enabled.
+     * 
+     * @param edgeFlags Combination of edge flags describing the edges to watch
+     * @see #EDGE_LEFT
+     * @see #EDGE_RIGHT
+     * @see #EDGE_BOTTOM
+     */
+    public void setEdgeTrackingEnabled(int edgeFlags) {
+        mEdgeFlag = edgeFlags;
+        mDragHelper.setEdgeTrackingEnabled(mEdgeFlag);
     }
 
     /**
@@ -291,15 +308,13 @@ public class SwipeBackLayout extends FrameLayout {
 
         @Override
         public boolean tryCaptureView(View view, int i) {
-            boolean ret = true;
+            boolean ret = mDragHelper.isEdgeTouched(mEdgeFlag, i);
             if (mDragHelper.isEdgeTouched(EDGE_LEFT, i)) {
                 mTouchEdge = EDGE_LEFT;
             } else if (mDragHelper.isEdgeTouched(EDGE_RIGHT, i)) {
                 mTouchEdge = EDGE_RIGHT;
             } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
                 mTouchEdge = EDGE_BOTTOM;
-            } else {
-                ret = false;
             }
             return ret;
         }
