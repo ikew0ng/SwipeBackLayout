@@ -1,10 +1,12 @@
 
 package me.imid.swipebacklayout.demo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.RadioGroup;
 
@@ -15,6 +17,8 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  * Created by Issac on 8/11/13.
  */
 public class DemoActivity extends SwipeBackActivity implements View.OnClickListener {
+    private static final int VIBRATE_DURATION = 20;
+
     private int[] mBgColors;
 
     private static int mBgIndex = 0;
@@ -53,6 +57,22 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                 }
                 mSwipeBackLayout.setEdgeTrackingEnabled(edgeFlag);
                 saveTrackingMode(edgeFlag);
+            }
+        });
+        mSwipeBackLayout.setSwipeListener(new SwipeBackLayout.SwipeListener() {
+            @Override
+            public void onScrollStateChange(int state, float scrollPercent) {
+
+            }
+
+            @Override
+            public void onEdgeTouch(int edgeFlag) {
+                vibrate(VIBRATE_DURATION);
+            }
+
+            @Override
+            public void onScrollOverThreshold() {
+                vibrate(VIBRATE_DURATION);
             }
         });
     }
@@ -112,6 +132,14 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
             };
         }
         return mBgColors;
+    }
+
+    private void vibrate(long duration) {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {
+                0, duration
+        };
+        vibrator.vibrate(pattern, -1);
     }
 
     @Override

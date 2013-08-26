@@ -22,34 +22,49 @@ Usage
 Simple Example
 ===
 ```
-public class TestActivity extends SwipeBackActivity {
-    private View mContainer;
-
-    private int[] mBgColors = new int[] {
-            Color.BLACK, Color.BLUE, Color.GRAY, Color.RED, Color.YELLOW
-    };
+public class DemoActivity extends SwipeBackActivity implements View.OnClickListener {
+    private int[] mBgColors;
 
     private static int mBgIndex = 0;
+
+    private String mKeyTrackingMode;
+
+    private RadioGroup mTrackingModeGroup;
+
+    private SwipeBackLayout mSwipeBackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_demo);
+        changeActionBarColor();
+        findViews();
+        mKeyTrackingMode = getString(R.string.key_tracking_mode);
+        mSwipeBackLayout = getSwipeBackLayout();
+
+        mTrackingModeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(TestActivity.this, TestActivity.class));
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int edgeFlag;
+                switch (checkedId) {
+                    case R.id.mode_left:
+                        edgeFlag = SwipeBackLayout.EDGE_LEFT;
+                        break;
+                    case R.id.mode_right:
+                        edgeFlag = SwipeBackLayout.EDGE_RIGHT;
+                        break;
+                    case R.id.mode_bottom:
+                        edgeFlag = SwipeBackLayout.EDGE_BOTTOM;
+                        break;
+                    default:
+                        edgeFlag = SwipeBackLayout.EDGE_ALL;
+                }
+                mSwipeBackLayout.setEdgeTrackingEnabled(edgeFlag);
+                saveTrackingMode(edgeFlag);
             }
         });
-        mContainer = findViewById(R.id.container);
-        mContainer.setBackgroundColor(mBgColors[mBgIndex]);
-        mBgIndex++;
-        if (mBgIndex >= mBgColors.length) {
-            mBgIndex = 0;
-        }
     }
-
-}
+...
 ```
 
 
