@@ -25,4 +25,20 @@ android {
         minSdkVersion 14
         targetSdkVersion 14
     }
+
+
+    signingConfigs {
+        swipebackdemo {
+            storeFile file("/Users/Issac/Dropbox/Develop/RefacTech.keystore")
+            storePassword "RefacTech"
+            keyAlias "SwipeBackDemo"
+            keyPassword "SwipeBackDemo"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.swipebackdemo
+        }
+    }
 }
