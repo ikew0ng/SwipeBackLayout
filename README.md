@@ -4,7 +4,7 @@ SwipeBackLayout
 An Android library that help you to build app with swipe back gesture.
 
 
-![image](https://github.com/Issacw0ng/SwipeBackLayout/blob/master/art/screenshot.png?raw=true)
+![](https://github.com/Issacw0ng/SwipeBackLayout/blob/master/art/screenshot.png?raw=true)
 
 
 Demo Apk

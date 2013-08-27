@@ -107,6 +107,8 @@ public class SwipeBackLayout extends FrameLayout {
 
     private Rect mTmpRect = new Rect();
 
+    private Region mTmpRegion = new Region();
+
     public SwipeBackLayout(Context context) {
         this(context, null);
     }
@@ -318,10 +320,14 @@ public class SwipeBackLayout extends FrameLayout {
         final int imag = (int) (baseAlpha * mScrimOpacity);
         final int color = imag << 24 | (mScrimColor & 0xffffff);
         mScrimPaint.setColor(color);
-        Region region = new Region();
-        region.union(new Rect(0, 0, child.getLeft(), getHeight()));
-        region.union(new Rect(child.getRight(), 0, getRight(), getBottom()));
-        region.union(new Rect(child.getLeft(), child.getBottom(), getRight(), getHeight()));
+        final Region region = mTmpRegion;
+        final Rect rect = mTmpRect;
+        rect.set(0, 0, child.getLeft(), getHeight());
+        region.union(rect);
+        rect.set(child.getRight(), 0, getRight(), getBottom());
+        region.union(rect);
+        rect.set(child.getLeft(), child.getBottom(), getRight(), getHeight());
+        region.union(rect);
         canvas.clipRegion(region);
         canvas.drawRect(0, 0, getWidth(), getHeight(), mScrimPaint);
         canvas.restoreToCount(restoreCount);
