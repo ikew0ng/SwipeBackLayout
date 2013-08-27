@@ -317,8 +317,8 @@ public class SwipeBackLayout extends FrameLayout {
     private void drawScrim(Canvas canvas, View child) {
         final int restoreCount = canvas.save();
         final int baseAlpha = (mScrimColor & 0xff000000) >>> 24;
-        final int imag = (int) (baseAlpha * mScrimOpacity);
-        final int color = imag << 24 | (mScrimColor & 0xffffff);
+        final int image = (int) (baseAlpha * mScrimOpacity);
+        final int color = image << 24 | (mScrimColor & 0xffffff);
         mScrimPaint.setColor(color);
         final Region region = mTmpRegion;
         final Rect rect = mTmpRect;
@@ -431,7 +431,8 @@ public class SwipeBackLayout extends FrameLayout {
             if (mScrollPercent < mScrollThreshold && !mIsScrollOverValid) {
                 mIsScrollOverValid = true;
             }
-            if (mSwipeListener != null && mScrollPercent >= mScrollThreshold && mIsScrollOverValid) {
+            if (mSwipeListener != null && mDragHelper.getViewDragState() == STATE_DRAGGING
+                    && mScrollPercent >= mScrollThreshold && mIsScrollOverValid) {
                 mIsScrollOverValid = false;
                 mSwipeListener.onScrollOverThreshold();
             }
