@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
@@ -97,8 +96,6 @@ public class SwipeBackLayout extends FrameLayout {
 
     private Drawable mShadowBottom;
 
-    private Paint mScrimPaint = new Paint();
-
     private float mScrimOpacity;
 
     private int mScrimColor = DEFAULT_SCRIM_COLOR;
@@ -108,6 +105,11 @@ public class SwipeBackLayout extends FrameLayout {
     private Rect mTmpRect = new Rect();
 
     private Region mTmpRegion = new Region();
+
+    /**
+     * Edge being dragged
+     */
+    private int mDraggingEdge;
 
     public SwipeBackLayout(Context context) {
         this(context, null);
@@ -306,31 +308,52 @@ public class SwipeBackLayout extends FrameLayout {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         final boolean drawContent = child == mContentView;
         drawShadow(canvas, child);
+
+        boolean ret = super.drawChild(canvas, child, drawingTime);
         if (mScrimOpacity > 0 && drawContent
                 && mDragHelper.getViewDragState() != ViewDragHelper.STATE_IDLE) {
             drawScrim(canvas, child);
         }
-
-        return super.drawChild(canvas, child, drawingTime);
+        return ret;
     }
 
     private void drawScrim(Canvas canvas, View child) {
-        final int restoreCount = canvas.save();
         final int baseAlpha = (mScrimColor & 0xff000000) >>> 24;
-        final int image = (int) (baseAlpha * mScrimOpacity);
-        final int color = image << 24 | (mScrimColor & 0xffffff);
-        mScrimPaint.setColor(color);
-        final Region region = mTmpRegion;
-        final Rect rect = mTmpRect;
-        rect.set(0, 0, child.getLeft(), getHeight());
-        region.union(rect);
-        rect.set(child.getRight(), 0, getRight(), getBottom());
-        region.union(rect);
-        rect.set(child.getLeft(), child.getBottom(), getRight(), getHeight());
-        region.union(rect);
-        canvas.clipRegion(region);
-        canvas.drawRect(0, 0, getWidth(), getHeight(), mScrimPaint);
-        canvas.restoreToCount(restoreCount);
+        final int alpha = (int) (baseAlpha * mScrimOpacity);
+        final int color = alpha << 24 | (mScrimColor & 0xffffff);
+        //TODO canvas clip
+        // final Region region = mTmpRegion;
+        // region.setEmpty();
+        // canvas.clipRegion(region);
+        //
+        // final Rect rect = mTmpRect;
+
+        // Left clip region
+        // rect.set(0, 0, child.getLeft(), getHeight());
+        // region.union(rect);
+        // // Right clip region
+        // rect.set(child.getRight(), 0, getRight(), getHeight());
+        // region.union(rect);
+        // // Bottom clip region
+        // rect.set(child.getLeft(), child.getBottom(), getRight(),
+        // getHeight());
+        // region.union(rect);
+
+        // canvas.clipRegion(region, Region.Op.REPLACE);
+        // canvas.clipRect(0, 0, 0, 0);
+        // canvas.clipRect(0, 0, child.getLeft(), getHeight());
+        // canvas.clipRect(child.getRight(), 0, getRight(), getHeight());
+        // canvas.drawColor(color);
+        // canvas.restore();
+
+        if ((mDraggingEdge & EDGE_LEFT) != 0) {
+            canvas.clipRect(0, 0, child.getLeft(), getHeight());
+        } else if ((mDraggingEdge & EDGE_RIGHT) != 0) {
+            canvas.clipRect(child.getRight(), 0, getRight(), getHeight());
+        } else if ((mDraggingEdge & EDGE_BOTTOM) != 0) {
+            canvas.clipRect(child.getLeft(), child.getBottom(), getRight(), getHeight());
+        }
+        canvas.drawColor(color);
     }
 
     private void drawShadow(Canvas canvas, View child) {
@@ -382,8 +405,6 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     private class ViewDragCallback extends ViewDragHelper.Callback {
-        private int mTouchEdge;
-
         private boolean mIsScrollOverValid;
 
         @Override
@@ -391,14 +412,14 @@ public class SwipeBackLayout extends FrameLayout {
             boolean ret = mDragHelper.isEdgeTouched(mEdgeFlag, i);
             if (ret) {
                 if (mDragHelper.isEdgeTouched(EDGE_LEFT, i)) {
-                    mTouchEdge = EDGE_LEFT;
+                    mDraggingEdge = EDGE_LEFT;
                 } else if (mDragHelper.isEdgeTouched(EDGE_RIGHT, i)) {
-                    mTouchEdge = EDGE_RIGHT;
+                    mDraggingEdge = EDGE_RIGHT;
                 } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
-                    mTouchEdge = EDGE_BOTTOM;
+                    mDraggingEdge = EDGE_BOTTOM;
                 }
                 if (mSwipeListener != null) {
-                    mSwipeListener.onEdgeTouch(mTouchEdge);
+                    mSwipeListener.onEdgeTouch(mDraggingEdge);
                 }
                 mIsScrollOverValid = true;
             }
@@ -418,10 +439,10 @@ public class SwipeBackLayout extends FrameLayout {
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
-            if ((mTouchEdge & (EDGE_LEFT | EDGE_RIGHT)) != 0) {
+            if ((mDraggingEdge & (EDGE_LEFT | EDGE_RIGHT)) != 0) {
                 mScrollPercent = Math.abs((float) left
                         / (mContentView.getWidth() + mShadowRight.getIntrinsicWidth()));
-            } else if ((mTouchEdge & EDGE_BOTTOM) != 0) {
+            } else if ((mDraggingEdge & EDGE_BOTTOM) != 0) {
                 mScrollPercent = Math.abs((float) top
                         / (mContentView.getHeight() + mShadowBottom.getIntrinsicHeight()));
             }
@@ -444,13 +465,13 @@ public class SwipeBackLayout extends FrameLayout {
             final int childHeight = releasedChild.getHeight();
 
             int left = 0, top = 0;
-            if ((mTouchEdge & EDGE_LEFT) != 0) {
+            if ((mDraggingEdge & EDGE_LEFT) != 0) {
                 left = xvel > 0 || xvel == 0 && mScrollPercent > mScrollThreshold ? childWidth
                         + mShadowLeft.getIntrinsicWidth() : 0;
-            } else if ((mTouchEdge & EDGE_RIGHT) != 0) {
+            } else if ((mDraggingEdge & EDGE_RIGHT) != 0) {
                 left = xvel < 0 || xvel == 0 && mScrollPercent > mScrollThreshold ? -(childWidth + mShadowLeft
                         .getIntrinsicWidth()) : 0;
-            } else if ((mTouchEdge & EDGE_BOTTOM) != 0) {
+            } else if ((mDraggingEdge & EDGE_BOTTOM) != 0) {
                 top = yvel < 0 || yvel == 0 && mScrollPercent > mScrollThreshold ? -(childHeight + mShadowBottom
                         .getIntrinsicHeight()) : 0;
             }
@@ -462,9 +483,9 @@ public class SwipeBackLayout extends FrameLayout {
         @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
             int ret = 0;
-            if ((mTouchEdge & EDGE_LEFT) != 0) {
+            if ((mDraggingEdge & EDGE_LEFT) != 0) {
                 ret = Math.min(child.getWidth(), Math.max(left, 0));
-            } else if ((mTouchEdge & EDGE_RIGHT) != 0) {
+            } else if ((mDraggingEdge & EDGE_RIGHT) != 0) {
                 ret = Math.min(0, Math.max(left, -child.getWidth()));
             }
             return ret;
@@ -473,7 +494,7 @@ public class SwipeBackLayout extends FrameLayout {
         @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
             int ret = 0;
-            if ((mTouchEdge & EDGE_BOTTOM) != 0) {
+            if ((mDraggingEdge & EDGE_BOTTOM) != 0) {
                 ret = Math.min(0, Math.max(top, -child.getHeight()));
             }
             return ret;
