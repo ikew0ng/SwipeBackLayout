@@ -31,3 +31,7 @@ proguard.cfg
 
 #gradle
 .gradle
+
+#keystore
+keystore
+gradle.properties
