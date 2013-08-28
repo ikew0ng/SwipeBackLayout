@@ -1,11 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
-    }
-}
 apply plugin: 'android'
 
 repositories {
@@ -26,19 +18,31 @@ android {
         targetSdkVersion 14
     }
 
-
     signingConfigs {
-        swipebackdemo {
-            storeFile file("/Users/Issac/Dropbox/Develop/RefacTech.keystore")
-            storePassword "RefacTech"
-            keyAlias "SwipeBackDemo"
-            keyPassword "SwipeBackDemo"
-        }
+        signing
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.swipebackdemo
+            if (project.hasProperty('storeFile')) {
+                signingConfig signingConfigs.signing
+            }
         }
     }
+}
+
+if (project.hasProperty('storeFile')) {
+    android.signingConfigs.signing.storeFile = file(storeFile)
+}
+
+if (project.hasProperty('storePassword')) {
+    android.signingConfigs.signing.storePassword = storePassword
+}
+
+if (project.hasProperty('keyAlias')) {
+    android.signingConfigs.signing.keyAlias = keyAlias
+}
+
+if (project.hasProperty('keyPassword')) {
+    android.signingConfigs.signing.keyPassword = keyPassword
 }
