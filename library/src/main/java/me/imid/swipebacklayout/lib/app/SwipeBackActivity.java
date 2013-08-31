@@ -12,6 +12,10 @@ public class SwipeBackActivity extends FragmentActivity {
 
     private SwipeBackLayout mSwipeBackLayout;
 
+    private boolean mOverrideExitAniamtion = true;
+
+    private boolean mIsFinishing;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,5 +44,32 @@ public class SwipeBackActivity extends FragmentActivity {
 
     public void setSwipeBackEnable(boolean enable) {
         mSwipeBackLayout.setEnableGesture(enable);
+    }
+
+    /**
+     * Override Exit Animation
+     * 
+     * @param override
+     */
+    public void setOverrideExitAniamtion(boolean override) {
+        mOverrideExitAniamtion = override;
+    }
+
+    /**
+     * Scroll out contentView and finish the activity
+     */
+    public void scrollToFinishActivity() {
+        mSwipeBackLayout.scrollToFinishActivity();
+    }
+
+    @Override
+    public void finish() {
+        if (mOverrideExitAniamtion && !mIsFinishing) {
+            scrollToFinishActivity();
+            mIsFinishing = true;
+            return;
+        }
+        mIsFinishing = false;
+        super.finish();
     }
 }

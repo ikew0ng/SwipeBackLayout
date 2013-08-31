@@ -120,6 +120,7 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
 
     private void findViews() {
         findViewById(R.id.btn_start).setOnClickListener(this);
+        findViewById(R.id.btn_finish).setOnClickListener(this);
         mTrackingModeGroup = (RadioGroup) findViewById(R.id.tracking_mode);
     }
 
@@ -150,6 +151,9 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_start:
                 startActivity(new Intent(DemoActivity.this, DemoActivity.class));
+                break;
+            case R.id.btn_finish:
+                scrollToFinishActivity();
                 break;
         }
     }

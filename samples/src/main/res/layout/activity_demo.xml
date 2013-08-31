@@ -14,8 +14,16 @@
         android:layout_alignParentBottom="true"
         android:text="@string/start_activity"/>
 
-    <ScrollView
+    <Button
+        android:id="@+id/btn_finish"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@id/btn_start"
+        android:text="@string/finish_activity"/>
+
+    <ScrollView
+        android:layout_above="@id/btn_finish"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
