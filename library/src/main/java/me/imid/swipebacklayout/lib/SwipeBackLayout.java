@@ -104,6 +104,8 @@ public class SwipeBackLayout extends FrameLayout {
     private boolean mInLayout;
 
     private Rect mTmpRect = new Rect();
+    
+    private boolean mScrollToFinishAniamtion = true;
 
     /**
      * Edge being dragged
@@ -278,6 +280,11 @@ public class SwipeBackLayout extends FrameLayout {
         final int childHeight = mContentView.getHeight();
 
         int left = 0, top = 0;
+        
+        if(!mScrollToFinishAniamtion){
+        	return;
+        }
+        
         if ((mEdgeFlag & EDGE_LEFT) != 0) {
             left = childWidth + mShadowLeft.getIntrinsicWidth() + OVERSCROLL_DISTANCE;
             mTrackingEdge = EDGE_LEFT;
@@ -457,6 +464,7 @@ public class SwipeBackLayout extends FrameLayout {
             }
 
             if (mScrollPercent >= 1) {
+            	mScrollToFinishAniamtion = false;
                 mActivity.finish();
             }
         }
