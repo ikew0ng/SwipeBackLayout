@@ -62,6 +62,10 @@ public class SwipeBackActivity extends FragmentActivity {
         mSwipeBackLayout.scrollToFinishActivity();
     }
 
+    public void doFinish() {
+        super.finish();
+    }
+
     @Override
     public void finish() {
         if (mOverrideExitAniamtion && !mIsFinishing) {
@@ -70,6 +74,6 @@ public class SwipeBackActivity extends FragmentActivity {
             return;
         }
         mIsFinishing = false;
-        super.finish();
+        doFinish();
     }
 }
