@@ -3,13 +3,11 @@ package me.imid.swipebacklayout.lib.app;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.preference.PreferenceActivity;
 import android.view.View;
-
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
-public class SwipeBackActivity extends FragmentActivity {
-
+public class SwipeBackPreferenceActivity extends PreferenceActivity {
     private SwipeBackLayout mSwipeBackLayout;
 
     @Override
