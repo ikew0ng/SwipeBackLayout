@@ -1,12 +1,17 @@
-
-package me.imid.swipebacklayout.lib.app;
+package me.imid.swipebacklayout.demo.sherlock;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivityBase;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivityHelper;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
-public class SwipeBackActivity extends FragmentActivity implements SwipeBackActivityBase{
+import com.actionbarsherlock.app.SherlockActivity;
+/**
+ * sample for Actionbar sherlock
+ * @author Yrom
+ */
+public class SwipeBackSherlockActivity extends SherlockActivity implements SwipeBackActivityBase{
     private SwipeBackActivityHelper mHelper;
 
     @Override
@@ -25,9 +30,9 @@ public class SwipeBackActivity extends FragmentActivity implements SwipeBackActi
     @Override
     public View findViewById(int id) {
         View v = super.findViewById(id);
-        if (v == null && mHelper != null)
-            return mHelper.findViewById(id);
-        return v;
+        if (v != null)
+            return v;
+        return mHelper.findViewById(id);
     }
     
     @Override

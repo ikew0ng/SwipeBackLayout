@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SwipeBackDemo</string>
+    <string name="action_github">Github</string>
+    <string name="start_activity">Start new activity!</string>
+    <string name="start_activity_sherlock">Start sherlock activity!</string>
+    <string name="finish_activity">Finish Activity</string>
+
+    <string name="key_tracking_mode">key_tracking_mode</string>
+    <string name="tracking_mode_left">Left</string>
+    <string name="tracking_mode_right">Right</string>
+    <string name="tracking_mode_bottom">Bottom</string>
+    <string name="tracking_mode_all">All</string>
+
+</resources>
