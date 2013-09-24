@@ -311,7 +311,13 @@ public class SwipeBackLayout extends FrameLayout {
         if (!mEnable) {
             return false;
         }
-        return mDragHelper.shouldInterceptTouchEvent(event);
+        try{
+            return mDragHelper.shouldInterceptTouchEvent(event);
+        }catch(ArrayIndexOutOfBoundsException e){
+            // FIXME: handle exception
+            // issues #9
+            return false;
+        }
     }
 
     @Override
