@@ -124,7 +124,7 @@ public class SwipeBackLayout extends FrameLayout {
         super(context, attrs);
         mDragHelper = ViewDragHelper.create(this, new ViewDragCallback());
         
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.SwipeBackLayout,defStyle,0);
+        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.SwipeBackLayout,defStyle,R.style.SwipeBackLayout);
         
         int edgeSize = a.getDimensionPixelSize(R.styleable.SwipeBackLayout_edge_size, -1);
         if(edgeSize >0 )
