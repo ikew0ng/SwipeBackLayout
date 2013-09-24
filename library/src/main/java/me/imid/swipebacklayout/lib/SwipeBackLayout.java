@@ -459,7 +459,7 @@ public class SwipeBackLayout extends FrameLayout {
             }
 
             if (mScrollPercent >= 1) {
-                ((SwipeBackActivity) mActivity).doFinish();
+                ((SwipeBackActivity) mActivity).finish();
             }
         }
 

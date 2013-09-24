@@ -1,52 +1,46 @@
 
 package me.imid.swipebacklayout.lib.app;
 
-import android.graphics.drawable.ColorDrawable;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
-
-public class SwipeBackActivity extends FragmentActivity {
-
-    private SwipeBackLayout mSwipeBackLayout;
+public class SwipeBackActivity extends FragmentActivity implements SwipeBackActivityBase{
+    private SwipeBackActivityHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(0));
-        getWindow().getDecorView().setBackgroundDrawable(null);
-        mSwipeBackLayout = new SwipeBackLayout(this);
+        mHelper = new SwipeBackActivityHelper(this);
+        mHelper.onActivtyCreate();
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mSwipeBackLayout.attachToActivity(this);
+        mHelper.onPostCreate();
     }
 
     @Override
     public View findViewById(int id) {
         View v = super.findViewById(id);
-        if (v == null && mSwipeBackLayout != null) {
-            v = mSwipeBackLayout.findViewById(id);
-        }
-        return v;
+        if (v != null)
+            return v;
+        return mHelper.findViewById(id);
     }
-
+    
+    @Override
     public SwipeBackLayout getSwipeBackLayout() {
-        return mSwipeBackLayout;
+        return mHelper.getSwipeBackLayout();
     }
-
+    @Override
     public void setSwipeBackEnable(boolean enable) {
-        mSwipeBackLayout.setEnableGesture(enable);
+        getSwipeBackLayout().setEnableGesture(enable);
     }
 
-    /**
-     * Scroll out contentView and finish the activity
-     */
+    @Override
     public void scrollToFinishActivity() {
-        mSwipeBackLayout.scrollToFinishActivity();
+        getSwipeBackLayout().scrollToFinishActivity();
     }
 }
