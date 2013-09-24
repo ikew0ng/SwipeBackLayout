@@ -1,4 +1,4 @@
-package me.imid.swipebacklayout.demo;
+package me.imid.swipebacklayout.demo.sherlock;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivityBase;

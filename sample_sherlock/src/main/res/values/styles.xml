@@ -1,0 +1,10 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="Theme.Sherlock.Light">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="AppTheme" parent="AppBaseTheme">
+    </style>
+
+</resources>

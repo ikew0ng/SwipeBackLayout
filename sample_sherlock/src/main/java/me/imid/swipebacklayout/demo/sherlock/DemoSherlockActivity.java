@@ -1,6 +1,7 @@
 
-package me.imid.swipebacklayout.demo;
+package me.imid.swipebacklayout.demo.sherlock;
 
+import me.imid.swipebacklayout.demo.sherlock.R;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import android.content.Context;
 import android.content.Intent;
