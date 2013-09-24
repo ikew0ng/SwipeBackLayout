@@ -25,9 +25,9 @@ public class SwipeBackPreferenceActivity extends PreferenceActivity implements S
     @Override
     public View findViewById(int id) {
         View v = super.findViewById(id);
-        if (v != null)
-            return v;
-        return mHelper.findViewById(id);
+        if (v == null && mHelper != null)
+            return mHelper.findViewById(id);
+        return v;
     }
     
     @Override
