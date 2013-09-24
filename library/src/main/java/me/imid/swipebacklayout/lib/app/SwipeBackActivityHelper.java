@@ -3,6 +3,7 @@ package me.imid.swipebacklayout.lib.app;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
 import android.view.View;
 
 /**
@@ -21,7 +22,7 @@ public class SwipeBackActivityHelper {
     public void onActivtyCreate(){
         mActivity.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         mActivity.getWindow().getDecorView().setBackgroundDrawable(null);
-        mSwipeBackLayout = new SwipeBackLayout(mActivity);
+        mSwipeBackLayout = (SwipeBackLayout) LayoutInflater.from(mActivity).inflate(me.imid.swipebacklayout.lib.R.layout.swipeback_layout,null);
     }
     
     public void onPostCreate(){
