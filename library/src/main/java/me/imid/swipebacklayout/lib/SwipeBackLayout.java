@@ -67,10 +67,12 @@ public class SwipeBackLayout extends FrameLayout {
 
     private static final int OVERSCROLL_DISTANCE = 10;
 
-    private static final int[] EDGE_FLAGS = {EDGE_LEFT, EDGE_RIGHT, EDGE_BOTTOM, EDGE_ALL};
-    
+    private static final int[] EDGE_FLAGS = {
+            EDGE_LEFT, EDGE_RIGHT, EDGE_BOTTOM, EDGE_ALL
+    };
+
     private int mEdgeFlag;
-    
+
     /**
      * Threshold of scroll, we will close the activity, when scrollPercent over
      * this value;
@@ -119,22 +121,26 @@ public class SwipeBackLayout extends FrameLayout {
     public SwipeBackLayout(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.SwipeBackLayoutStyle);
     }
-    
+
     public SwipeBackLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
         mDragHelper = ViewDragHelper.create(this, new ViewDragCallback());
-        
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.SwipeBackLayout,defStyle,R.style.SwipeBackLayout);
-        
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipeBackLayout, defStyle,
+                R.style.SwipeBackLayout);
+
         int edgeSize = a.getDimensionPixelSize(R.styleable.SwipeBackLayout_edge_size, -1);
-        if(edgeSize >0 )
+        if (edgeSize > 0)
             setEdgeSize(edgeSize);
         int mode = EDGE_FLAGS[a.getInt(R.styleable.SwipeBackLayout_edge_flag, 0)];
         setEdgeTrackingEnabled(mode);
-        
-        int shadowLeft = a.getResourceId(R.styleable.SwipeBackLayout_shadow_left, R.drawable.shadow_left);
-        int shadowRight = a.getResourceId(R.styleable.SwipeBackLayout_shadow_right, R.drawable.shadow_right);
-        int shadowBottom = a.getResourceId(R.styleable.SwipeBackLayout_shadow_bottom, R.drawable.shadow_bottom);
+
+        int shadowLeft = a.getResourceId(R.styleable.SwipeBackLayout_shadow_left,
+                R.drawable.shadow_left);
+        int shadowRight = a.getResourceId(R.styleable.SwipeBackLayout_shadow_right,
+                R.drawable.shadow_right);
+        int shadowBottom = a.getResourceId(R.styleable.SwipeBackLayout_shadow_bottom,
+                R.drawable.shadow_bottom);
         setShadow(shadowLeft, EDGE_LEFT);
         setShadow(shadowRight, EDGE_RIGHT);
         setShadow(shadowBottom, EDGE_BOTTOM);
@@ -311,9 +317,9 @@ public class SwipeBackLayout extends FrameLayout {
         if (!mEnable) {
             return false;
         }
-        try{
+        try {
             return mDragHelper.shouldInterceptTouchEvent(event);
-        }catch(ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             // FIXME: handle exception
             // issues #9
             return false;
@@ -332,10 +338,10 @@ public class SwipeBackLayout extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mInLayout = true;
-        if(mContentView != null)
-        mContentView.layout(mContentLeft, mContentTop,
-                mContentLeft + mContentView.getMeasuredWidth(),
-                mContentTop + mContentView.getMeasuredHeight());
+        if (mContentView != null)
+            mContentView.layout(mContentLeft, mContentTop,
+                    mContentLeft + mContentView.getMeasuredWidth(),
+                    mContentTop + mContentView.getMeasuredHeight());
         mInLayout = false;
     }
 
@@ -446,12 +452,12 @@ public class SwipeBackLayout extends FrameLayout {
 
         @Override
         public int getViewHorizontalDragRange(View child) {
-            return 1;
+            return mEdgeFlag & (EDGE_LEFT | EDGE_RIGHT);
         }
 
         @Override
         public int getViewVerticalDragRange(View child) {
-            return 1;
+            return mEdgeFlag & EDGE_BOTTOM;
         }
 
         @Override
@@ -477,8 +483,8 @@ public class SwipeBackLayout extends FrameLayout {
             }
 
             if (mScrollPercent >= 1) {
-                if(!mActivity.isFinishing())
-                mActivity.finish();
+                if (!mActivity.isFinishing())
+                    mActivity.finish();
             }
         }
 
