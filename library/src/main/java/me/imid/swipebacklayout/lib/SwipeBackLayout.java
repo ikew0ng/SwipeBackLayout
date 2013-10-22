@@ -463,8 +463,11 @@ public class SwipeBackLayout extends FrameLayout {
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
-            if ((mTrackingEdge & (EDGE_LEFT | EDGE_RIGHT)) != 0) {
+            if ((mTrackingEdge & EDGE_LEFT) != 0) {
                 mScrollPercent = Math.abs((float) left
+                        / (mContentView.getWidth() + mShadowLeft.getIntrinsicWidth()));
+            } else if ((mTrackingEdge & EDGE_RIGHT) != 0) {
+                mScrollPercent = Math.abs((float) top
                         / (mContentView.getWidth() + mShadowRight.getIntrinsicWidth()));
             } else if ((mTrackingEdge & EDGE_BOTTOM) != 0) {
                 mScrollPercent = Math.abs((float) top
