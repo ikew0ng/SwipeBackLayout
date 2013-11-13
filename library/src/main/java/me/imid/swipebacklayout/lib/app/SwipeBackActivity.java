@@ -13,7 +13,7 @@ public class SwipeBackActivity extends FragmentActivity implements SwipeBackActi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHelper = new SwipeBackActivityHelper(this);
-        mHelper.onActivtyCreate();
+        mHelper.onActivityCreate();
     }
 
     @Override
