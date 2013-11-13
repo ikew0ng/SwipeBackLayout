@@ -62,7 +62,7 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                 saveTrackingMode(edgeFlag);
             }
         });
-        mSwipeBackLayout.setSwipeListener(new SwipeBackLayout.SwipeListener() {
+        mSwipeBackLayout.addSwipeListener(new SwipeBackLayout.SwipeListener() {
             @Override
             public void onScrollStateChange(int state, float scrollPercent) {
 

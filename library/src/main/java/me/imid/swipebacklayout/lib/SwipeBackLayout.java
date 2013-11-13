@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SwipeBackLayout extends FrameLayout {
     /**
      * Minimum velocity that will be detected as a fling
@@ -93,7 +96,10 @@ public class SwipeBackLayout extends FrameLayout {
 
     private int mContentTop;
 
-    private SwipeListener mSwipeListener;
+    /**
+     * The set of listeners to be sent events through.
+     */
+    private List<SwipeListener> mListeners;
 
     private Drawable mShadowLeft;
 
@@ -210,9 +216,35 @@ public class SwipeBackLayout extends FrameLayout {
      * view.
      * 
      * @param listener the swipe listener to attach to this view
+     * @deprecated use {@link #addSwipeListener} instead
      */
+    @Deprecated
     public void setSwipeListener(SwipeListener listener) {
-        mSwipeListener = listener;
+        addSwipeListener(listener);
+    }
+
+    /**
+     * Add a callback to be invoked when a swipe event is sent to this view.
+     * 
+     * @param listener the swipe listener to attach to this view
+     */
+    public void addSwipeListener(SwipeListener listener) {
+        if (mListeners == null) {
+            mListeners = new ArrayList<SwipeListener>();
+        }
+        mListeners.add(listener);
+    }
+
+    /**
+     * Removes a listener from the set of listeners
+     * 
+     * @param listener
+     */
+    public void removeSwipeListener(SwipeListener listener) {
+        if (mListeners == null) {
+            return;
+        }
+        mListeners.remove(listener);
     }
 
     public static interface SwipeListener {
@@ -442,8 +474,10 @@ public class SwipeBackLayout extends FrameLayout {
                 } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
                     mTrackingEdge = EDGE_BOTTOM;
                 }
-                if (mSwipeListener != null) {
-                    mSwipeListener.onEdgeTouch(mTrackingEdge);
+                if (mListeners != null && !mListeners.isEmpty()) {
+                    for (SwipeListener listener : mListeners) {
+                        listener.onEdgeTouch(mTrackingEdge);
+                    }
                 }
                 mIsScrollOverValid = true;
             }
@@ -479,10 +513,13 @@ public class SwipeBackLayout extends FrameLayout {
             if (mScrollPercent < mScrollThreshold && !mIsScrollOverValid) {
                 mIsScrollOverValid = true;
             }
-            if (mSwipeListener != null && mDragHelper.getViewDragState() == STATE_DRAGGING
+            if (mListeners != null && !mListeners.isEmpty()
+                    && mDragHelper.getViewDragState() == STATE_DRAGGING
                     && mScrollPercent >= mScrollThreshold && mIsScrollOverValid) {
                 mIsScrollOverValid = false;
-                mSwipeListener.onScrollOverThreshold();
+                for (SwipeListener listener : mListeners) {
+                    listener.onScrollOverThreshold();
+                }
             }
 
             if (mScrollPercent >= 1) {
@@ -535,8 +572,10 @@ public class SwipeBackLayout extends FrameLayout {
         @Override
         public void onViewDragStateChanged(int state) {
             super.onViewDragStateChanged(state);
-            if (mSwipeListener != null) {
-                mSwipeListener.onScrollStateChange(state, mScrollPercent);
+            if (mListeners != null && !mListeners.isEmpty()) {
+                for (SwipeListener listener : mListeners) {
+                    listener.onScrollStateChange(state, mScrollPercent);
+                }
             }
         }
     }

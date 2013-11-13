@@ -3,7 +3,6 @@ package me.imid.swipebacklayout.lib.app;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -29,11 +28,28 @@ public class SwipeBackActivityHelper {
         mActivity.getWindow().getDecorView().setBackgroundDrawable(null);
         mSwipeBackLayout = (SwipeBackLayout) LayoutInflater.from(mActivity).inflate(
                 me.imid.swipebacklayout.lib.R.layout.swipeback_layout, null);
+        mSwipeBackLayout.addSwipeListener(new SwipeBackLayout.SwipeListener() {
+            @Override
+            public void onScrollStateChange(int state, float scrollPercent) {
+                if (state == SwipeBackLayout.STATE_IDLE && scrollPercent == 0) {
+                    convertActivityFromTranslucent();
+                }
+            }
+
+            @Override
+            public void onEdgeTouch(int edgeFlag) {
+                convertActivityToTranslucent();
+            }
+
+            @Override
+            public void onScrollOverThreshold() {
+
+            }
+        });
     }
 
     public void onPostCreate() {
         mSwipeBackLayout.attachToActivity(mActivity);
-        convertActivityFromTranslucent();
     }
 
     public View findViewById(int id) {
@@ -85,11 +101,8 @@ public class SwipeBackActivityHelper {
             Class<?>[] classes = Activity.class.getDeclaredClasses();
             Class<?> translucentConversionListenerClazz = null;
             for (Class clazz : classes) {
-                if (clazz.getName().contains("TranslucentConversionListener")) {
+                if (clazz.getSimpleName().contains("TranslucentConversionListener")) {
                     translucentConversionListenerClazz = clazz;
-                    Log.e("class ",
-                            clazz.getName() + "," + clazz.getCanonicalName() + ","
-                                    + clazz.getSimpleName());
                 }
             }
             Method method = Activity.class.getDeclaredMethod("convertToTranslucent",
