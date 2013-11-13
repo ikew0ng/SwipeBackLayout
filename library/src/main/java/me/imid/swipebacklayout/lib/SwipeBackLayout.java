@@ -501,7 +501,7 @@ public class SwipeBackLayout extends FrameLayout {
                 mScrollPercent = Math.abs((float) left
                         / (mContentView.getWidth() + mShadowLeft.getIntrinsicWidth()));
             } else if ((mTrackingEdge & EDGE_RIGHT) != 0) {
-                mScrollPercent = Math.abs((float) top
+                mScrollPercent = Math.abs((float) left
                         / (mContentView.getWidth() + mShadowRight.getIntrinsicWidth()));
             } else if ((mTrackingEdge & EDGE_BOTTOM) != 0) {
                 mScrollPercent = Math.abs((float) top
