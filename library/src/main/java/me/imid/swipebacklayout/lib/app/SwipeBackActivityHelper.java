@@ -50,6 +50,7 @@ public class SwipeBackActivityHelper {
 
     public void onPostCreate() {
         mSwipeBackLayout.attachToActivity(mActivity);
+        convertActivityFromTranslucent();
     }
 
     public View findViewById(int id) {
