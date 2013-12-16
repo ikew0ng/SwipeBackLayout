@@ -426,6 +426,19 @@ public class ViewDragHelper {
     }
 
     /**
+     * Sets the sensitivity of the dragger.
+     * 
+     * @param context The application context.
+     * @param sensitivity value between 0 and 1, the final value for touchSlop =
+     *            ViewConfiguration.getScaledTouchSlop * (1 / s);
+     */
+    public void setSensitivity(Context context, float sensitivity) {
+        float s = Math.max(0f, Math.min(1.0f, sensitivity));
+        ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
+        mTouchSlop = (int) (viewConfiguration.getScaledTouchSlop() * (1 / s));
+    }
+
+    /**
      * Set the minimum velocity that will be detected as having a magnitude
      * greater than zero in pixels per second. Callback methods accepting a
      * velocity will be clamped appropriately.
