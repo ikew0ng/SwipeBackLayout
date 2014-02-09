@@ -120,7 +120,7 @@ public class ViewDragHelper {
 
     private float[] mLastMotionY;
 
-    private int[] mInitialEdgesTouched;
+    private int[] mInitialEdgeTouched;
 
     private int[] mEdgeDragsInProgress;
 
@@ -857,7 +857,7 @@ public class ViewDragHelper {
         Arrays.fill(mInitialMotionY, 0);
         Arrays.fill(mLastMotionX, 0);
         Arrays.fill(mLastMotionY, 0);
-        Arrays.fill(mInitialEdgesTouched, 0);
+        Arrays.fill(mInitialEdgeTouched, 0);
         Arrays.fill(mEdgeDragsInProgress, 0);
         Arrays.fill(mEdgeDragsLocked, 0);
         mPointersDown = 0;
@@ -871,7 +871,7 @@ public class ViewDragHelper {
         mInitialMotionY[pointerId] = 0;
         mLastMotionX[pointerId] = 0;
         mLastMotionY[pointerId] = 0;
-        mInitialEdgesTouched[pointerId] = 0;
+        mInitialEdgeTouched[pointerId] = 0;
         mEdgeDragsInProgress[pointerId] = 0;
         mEdgeDragsLocked[pointerId] = 0;
         mPointersDown &= ~(1 << pointerId);
@@ -892,7 +892,7 @@ public class ViewDragHelper {
                 System.arraycopy(mInitialMotionY, 0, imy, 0, mInitialMotionY.length);
                 System.arraycopy(mLastMotionX, 0, lmx, 0, mLastMotionX.length);
                 System.arraycopy(mLastMotionY, 0, lmy, 0, mLastMotionY.length);
-                System.arraycopy(mInitialEdgesTouched, 0, iit, 0, mInitialEdgesTouched.length);
+                System.arraycopy(mInitialEdgeTouched, 0, iit, 0, mInitialEdgeTouched.length);
                 System.arraycopy(mEdgeDragsInProgress, 0, edip, 0, mEdgeDragsInProgress.length);
                 System.arraycopy(mEdgeDragsLocked, 0, edl, 0, mEdgeDragsLocked.length);
             }
@@ -901,7 +901,7 @@ public class ViewDragHelper {
             mInitialMotionY = imy;
             mLastMotionX = lmx;
             mLastMotionY = lmy;
-            mInitialEdgesTouched = iit;
+            mInitialEdgeTouched = iit;
             mEdgeDragsInProgress = edip;
             mEdgeDragsLocked = edl;
         }
@@ -911,7 +911,7 @@ public class ViewDragHelper {
         ensureMotionHistorySizeForId(pointerId);
         mInitialMotionX[pointerId] = mLastMotionX[pointerId] = x;
         mInitialMotionY[pointerId] = mLastMotionY[pointerId] = y;
-        mInitialEdgesTouched[pointerId] = getEdgesTouched((int) x, (int) y);
+        mInitialEdgeTouched[pointerId] = getEdgeTouched((int) x, (int) y);
         mPointersDown |= 1 << pointerId;
     }
 
@@ -1056,7 +1056,7 @@ public class ViewDragHelper {
                     tryCaptureViewForDrag(toCapture, pointerId);
                 }
 
-                final int edgesTouched = mInitialEdgesTouched[pointerId];
+                final int edgesTouched = mInitialEdgeTouched[pointerId];
                 if ((edgesTouched & mTrackingEdges) != 0) {
                     mCallback.onEdgeTouched(edgesTouched & mTrackingEdges, pointerId);
                 }
@@ -1072,7 +1072,7 @@ public class ViewDragHelper {
 
                 // A ViewDragHelper can only manipulate one view at a time.
                 if (mDragState == STATE_IDLE) {
-                    final int edgesTouched = mInitialEdgesTouched[pointerId];
+                    final int edgesTouched = mInitialEdgeTouched[pointerId];
                     if ((edgesTouched & mTrackingEdges) != 0) {
                         mCallback.onEdgeTouched(edgesTouched & mTrackingEdges, pointerId);
                     }
@@ -1166,7 +1166,7 @@ public class ViewDragHelper {
                 // Start immediately if possible.
                 tryCaptureViewForDrag(toCapture, pointerId);
 
-                final int edgesTouched = mInitialEdgesTouched[pointerId];
+                final int edgesTouched = mInitialEdgeTouched[pointerId];
                 if ((edgesTouched & mTrackingEdges) != 0) {
                     mCallback.onEdgeTouched(edgesTouched & mTrackingEdges, pointerId);
                 }
@@ -1188,7 +1188,7 @@ public class ViewDragHelper {
                     final View toCapture = findTopChildUnder((int) x, (int) y);
                     tryCaptureViewForDrag(toCapture, pointerId);
 
-                    final int edgesTouched = mInitialEdgesTouched[pointerId];
+                    final int edgesTouched = mInitialEdgeTouched[pointerId];
                     if ((edgesTouched & mTrackingEdges) != 0) {
                         mCallback.onEdgeTouched(edgesTouched & mTrackingEdges, pointerId);
                     }
@@ -1319,7 +1319,7 @@ public class ViewDragHelper {
         final float absDelta = Math.abs(delta);
         final float absODelta = Math.abs(odelta);
 
-        if ((mInitialEdgesTouched[pointerId] & edge) != edge || (mTrackingEdges & edge) == 0
+        if ((mInitialEdgeTouched[pointerId] & edge) != edge || (mTrackingEdges & edge) == 0
                 || (mEdgeDragsLocked[pointerId] & edge) == edge
                 || (mEdgeDragsInProgress[pointerId] & edge) == edge
                 || (absDelta <= mTouchSlop && absODelta <= mTouchSlop)) {
@@ -1436,7 +1436,7 @@ public class ViewDragHelper {
      *         current gesture
      */
     public boolean isEdgeTouched(int edges) {
-        final int count = mInitialEdgesTouched.length;
+        final int count = mInitialEdgeTouched.length;
         for (int i = 0; i < count; i++) {
             if (isEdgeTouched(edges, i)) {
                 return true;
@@ -1458,7 +1458,7 @@ public class ViewDragHelper {
      *         current gesture
      */
     public boolean isEdgeTouched(int edges, int pointerId) {
-        return isPointerDown(pointerId) && (mInitialEdgesTouched[pointerId] & edges) != 0;
+        return isPointerDown(pointerId) && (mInitialEdgeTouched[pointerId] & edges) != 0;
     }
 
     private void releaseViewForPointerUp() {
@@ -1548,17 +1548,17 @@ public class ViewDragHelper {
         return null;
     }
 
-    private int getEdgesTouched(int x, int y) {
+    private int getEdgeTouched(int x, int y) {
         int result = 0;
 
         if (x < mParentView.getLeft() + mEdgeSize)
-            result |= EDGE_LEFT;
+            result = EDGE_LEFT;
         if (y < mParentView.getTop() + mEdgeSize)
-            result |= EDGE_TOP;
+            result = EDGE_TOP;
         if (x > mParentView.getRight() - mEdgeSize)
-            result |= EDGE_RIGHT;
+            result = EDGE_RIGHT;
         if (y > mParentView.getBottom() - mEdgeSize)
-            result |= EDGE_BOTTOM;
+            result = EDGE_BOTTOM;
 
         return result;
     }
