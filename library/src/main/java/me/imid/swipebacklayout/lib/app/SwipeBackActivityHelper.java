@@ -2,6 +2,7 @@
 package me.imid.swipebacklayout.lib.app;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ public class SwipeBackActivityHelper {
 
     @SuppressWarnings("deprecation")
     public void onActivityCreate() {
-        mActivity.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        mActivity.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mActivity.getWindow().getDecorView().setBackgroundDrawable(null);
         mSwipeBackLayout = (SwipeBackLayout) LayoutInflater.from(mActivity).inflate(
                 me.imid.swipebacklayout.lib.R.layout.swipeback_layout, null);
