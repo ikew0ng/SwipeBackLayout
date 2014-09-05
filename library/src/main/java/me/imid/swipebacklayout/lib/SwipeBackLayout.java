@@ -156,6 +156,7 @@ public class SwipeBackLayout extends FrameLayout {
         final float density = getResources().getDisplayMetrics().density;
         final float minVel = MIN_FLING_VELOCITY * density;
         mDragHelper.setMinVelocity(minVel);
+        mDragHelper.setMaxVelocity(minVel * 2f);
     }
 
     /**
