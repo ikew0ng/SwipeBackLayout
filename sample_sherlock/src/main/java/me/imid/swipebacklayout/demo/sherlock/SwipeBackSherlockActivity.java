@@ -18,7 +18,7 @@ public class SwipeBackSherlockActivity extends SherlockActivity implements Swipe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHelper = new SwipeBackActivityHelper(this);
-        mHelper.onActivtyCreate();
+        mHelper.onActivityCreate();
     }
 
     @Override
