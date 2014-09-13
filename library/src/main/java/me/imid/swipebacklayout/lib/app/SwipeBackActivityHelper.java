@@ -1,4 +1,3 @@
-
 package me.imid.swipebacklayout.lib.app;
 
 import android.app.Activity;
@@ -31,9 +30,6 @@ public class SwipeBackActivityHelper {
         mSwipeBackLayout.addSwipeListener(new SwipeBackLayout.SwipeListener() {
             @Override
             public void onScrollStateChange(int state, float scrollPercent) {
-                if (state == SwipeBackLayout.STATE_IDLE && scrollPercent == 0) {
-                    Utils.convertActivityFromTranslucent(mActivity);
-                }
             }
 
             @Override
@@ -50,7 +46,6 @@ public class SwipeBackActivityHelper {
 
     public void onPostCreate() {
         mSwipeBackLayout.attachToActivity(mActivity);
-        Utils.convertActivityFromTranslucent(mActivity);
     }
 
     public View findViewById(int id) {
