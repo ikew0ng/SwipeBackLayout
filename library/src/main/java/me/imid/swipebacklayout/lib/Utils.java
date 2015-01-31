@@ -2,6 +2,8 @@
 package me.imid.swipebacklayout.lib;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
+import android.os.Build;
 
 import java.lang.reflect.Method;
 
@@ -54,12 +56,26 @@ public class Utils {
                     translucentConversionListenerClazz = clazz;
                 }
             }
-            Method method = Activity.class.getDeclaredMethod("convertToTranslucent",
-                    translucentConversionListenerClazz);
-            method.setAccessible(true);
-            method.invoke(activity, new Object[] {
-                null
-            });
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                Method method = Activity.class.getDeclaredMethod(
+                        "convertToTranslucent",
+                        translucentConversionListenerClazz);
+                method.setAccessible(true);
+                method.invoke(activity, new Object[] {
+                        null
+                });
+            } else {
+                Method method = Activity.class.getDeclaredMethod(
+                        "convertToTranslucent",
+                        translucentConversionListenerClazz,
+                        ActivityOptions.class);
+                method.setAccessible(true);
+                method.invoke(activity, new Object[] {
+                        null,
+                        null
+                });
+            }
+
         } catch (Throwable t) {
         }
     }
