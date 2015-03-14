@@ -496,7 +496,16 @@ public class SwipeBackLayout extends FrameLayout {
                 }
                 mIsScrollOverValid = true;
             }
-            return ret;
+            boolean directionCheck = false;
+            if (mEdgeFlag == EDGE_LEFT || mEdgeFlag == EDGE_RIGHT) {
+                directionCheck = !mDragHelper.checkTouchSlop(ViewDragHelper.DIRECTION_VERTICAL, i);
+            } else if (mEdgeFlag == EDGE_BOTTOM) {
+                directionCheck = !mDragHelper
+                        .checkTouchSlop(ViewDragHelper.DIRECTION_HORIZONTAL, i);
+            } else if (mEdgeFlag == EDGE_ALL) {
+                directionCheck = true;
+            }
+            return ret & directionCheck;
         }
 
         @Override
