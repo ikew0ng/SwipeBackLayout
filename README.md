@@ -72,6 +72,12 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
 ...
 ```
 
+Download
+===
+Download via Jcenter:
+```
+compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+```
 
 
 Pull Requests
