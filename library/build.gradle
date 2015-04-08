@@ -13,12 +13,12 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionCode 1
         versionName version
     }
@@ -75,7 +75,10 @@ artifacts {
     archives sourcesJar
 }
 Properties properties = new Properties()
-properties.load(project.file('gradle.properties').newDataInputStream())
+File gradle_properties = project.file('gradle.properties');
+if (gradle_properties.exists()) {
+    properties.load(project.file('gradle.properties').newDataInputStream())
+}
 bintray {
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
