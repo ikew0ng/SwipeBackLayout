@@ -271,6 +271,8 @@ public class SwipeBackLayout extends FrameLayout {
          */
         public void onScrollStateChange(int state, float scrollPercent);
 
+        public void onScrollLeftChange(int left);
+
         /**
          * Invoke when edge touched
          *
@@ -511,6 +513,10 @@ public class SwipeBackLayout extends FrameLayout {
 
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+
+            for (SwipeListener listener : mListeners) {
+                listener.onScrollLeftChange(left);
+            }
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             if ((mTrackingEdge & EDGE_LEFT) != 0) {
                 mScrollPercent = Math.abs((float) left
