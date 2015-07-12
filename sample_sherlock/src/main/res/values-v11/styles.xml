@@ -1,6 +1,0 @@
-<resources>
-
-    <style name="AppTheme" parent="Theme.Sherlock.Light">
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
-</resources>

@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,12 +33,14 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
 
     private SwipeBackLayout mSwipeBackLayout;
 
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
-        changeActionBarColor();
         findViews();
+        changeActionBarColor();
         mKeyTrackingMode = getString(R.string.key_tracking_mode);
         mSwipeBackLayout = getSwipeBackLayout();
 
@@ -111,7 +114,7 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
     }
 
     private void changeActionBarColor() {
-        getActionBar().setBackgroundDrawable(new ColorDrawable(getColors()[mBgIndex]));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColors()[mBgIndex]));
         mBgIndex++;
         if (mBgIndex >= getColors().length) {
             mBgIndex = 0;
@@ -119,6 +122,7 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
     }
 
     private void findViews() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         findViewById(R.id.btn_start).setOnClickListener(this);
         findViewById(R.id.btn_finish).setOnClickListener(this);
         mTrackingModeGroup = (RadioGroup) findViewById(R.id.tracking_mode);

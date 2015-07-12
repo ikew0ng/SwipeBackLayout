@@ -1,29 +1,26 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-
-version = "1.0.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.android.support:appcompat-v7:22.2.0'
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
-        versionName version
+        versionName "1.0.0"
     }
 }
 
+/*
 def siteUrl = 'https://github.com/ikew0ng/SwipeBackLayout'
 def gitUrl = 'https://github.com/ikew0ng/SwipeBackLayout.git'
 group = "me.imid.swipebacklayout.lib"
@@ -91,4 +88,4 @@ bintray {
         licenses = ["Apache-2.0"]
         publish = true
     }
-}
+}*/
