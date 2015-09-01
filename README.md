@@ -26,7 +26,7 @@ Usage
 
 Simple Example
 ===
-```
+```Java
 public class DemoActivity extends SwipeBackActivity implements View.OnClickListener {
     private int[] mBgColors;
 
