@@ -111,7 +111,7 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
     }
 
     private void changeActionBarColor() {
-        getActionBar().setBackgroundDrawable(new ColorDrawable(getColors()[mBgIndex]));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColors()[mBgIndex]));
         mBgIndex++;
         if (mBgIndex >= getColors().length) {
             mBgIndex = 0;
