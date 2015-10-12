@@ -547,9 +547,10 @@ public class SwipeBackLayout extends FrameLayout {
             }
 
             if (mScrollPercent >= 1) {
-                if (!mActivity.isFinishing())
+                if (!mActivity.isFinishing()) {
                     mActivity.finish();
-                    mActivity.overridePendingTransition(0, 0);
+                    mActivity.overridePendingTransition(0, 0);        
+                }
             }
         }
 
