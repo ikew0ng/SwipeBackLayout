@@ -1475,20 +1475,19 @@ public class ViewDragHelper {
     }
 
     /**
-     * Check if any of the edges specified were initially touched in the
-     * currently active gesture. If there is no currently active gesture this
-     * method will return false.
+     * Check if there is a drag in progress for any of the specified edges.
+     * If there is no currently active gesture or if this method will return
+     * false.
      *
-     * @param edges Edges to check for an initial edge touch. See
+     * @param edges Edges to check for a drag gesture in progress. See
      *              {@link #EDGE_LEFT}, {@link #EDGE_TOP}, {@link #EDGE_RIGHT},
      *              {@link #EDGE_BOTTOM} and {@link #EDGE_ALL}
-     * @return true if any of the edges specified were initially touched in the
-     * current gesture
+     * @return true if there is a drag in progress for any of the specified edges.
      */
-    public boolean isEdgeTouched(int edges) {
+    public boolean isEdgeDragInProgress(int edges) {
         final int count = mInitialEdgeTouched.length;
         for (int i = 0; i < count; i++) {
-            if (isEdgeTouched(edges, i)) {
+            if (isEdgeDragInProgress(edges, i)) {
                 return true;
             }
         }
@@ -1496,19 +1495,18 @@ public class ViewDragHelper {
     }
 
     /**
-     * Check if any of the edges specified were initially touched by the pointer
-     * with the specified ID. If there is no currently active gesture or if
+     * Check if there is a drag in progress by the pointer with the specified ID
+     * for any of the specified edges. If there is no currently active gesture or if
      * there is no pointer with the given ID currently down this method will
      * return false.
      *
-     * @param edges Edges to check for an initial edge touch. See
+     * @param edges Edges to check for a drag gesture in progress. See
      *              {@link #EDGE_LEFT}, {@link #EDGE_TOP}, {@link #EDGE_RIGHT},
      *              {@link #EDGE_BOTTOM} and {@link #EDGE_ALL}
-     * @return true if any of the edges specified were initially touched in the
-     * current gesture
+     * @return true if there is a drag in progress for any of the specified edges.
      */
-    public boolean isEdgeTouched(int edges, int pointerId) {
-        return isPointerDown(pointerId) && (mInitialEdgeTouched[pointerId] & edges) != 0;
+    public boolean isEdgeDragInProgress(int edges, int pointerId) {
+        return isPointerDown(pointerId) && (mEdgeDragsInProgress[pointerId] & edges) != 0;
     }
 
     private void releaseViewForPointerUp() {

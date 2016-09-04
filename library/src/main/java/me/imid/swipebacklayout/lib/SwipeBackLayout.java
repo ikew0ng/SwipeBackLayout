@@ -493,13 +493,13 @@ public class SwipeBackLayout extends FrameLayout {
 
         @Override
         public boolean tryCaptureView(View view, int i) {
-            boolean ret = mDragHelper.isEdgeTouched(mEdgeFlag, i);
+            boolean ret = mDragHelper.isEdgeDragInProgress(mEdgeFlag, i);
             if (ret) {
-                if (mDragHelper.isEdgeTouched(EDGE_LEFT, i)) {
+                if (mDragHelper.isEdgeDragInProgress(EDGE_LEFT, i)) {
                     mTrackingEdge = EDGE_LEFT;
-                } else if (mDragHelper.isEdgeTouched(EDGE_RIGHT, i)) {
+                } else if (mDragHelper.isEdgeDragInProgress(EDGE_RIGHT, i)) {
                     mTrackingEdge = EDGE_RIGHT;
-                } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
+                } else if (mDragHelper.isEdgeDragInProgress(EDGE_BOTTOM, i)) {
                     mTrackingEdge = EDGE_BOTTOM;
                 }
                 if (mListeners != null && !mListeners.isEmpty()) {
@@ -562,7 +562,7 @@ public class SwipeBackLayout extends FrameLayout {
             if (mScrollPercent >= 1) {
                 if (!mActivity.isFinishing()) {
                     mActivity.finish();
-                    mActivity.overridePendingTransition(0, 0);        
+                    mActivity.overridePendingTransition(0, 0);
                 }
             }
         }
