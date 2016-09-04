@@ -224,6 +224,19 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     /**
+     * Set whether the swipe back gesture should be possible when dragging from anywhere within
+     * the activity instead of only from the edges.
+     *
+     * This changes the meaning of {@link #setEdgeTrackingEnabled(int)} to describe in which
+     * directions drag gesture should be possible.
+     *
+     * @param enabled Whether dragging from anywhere within the activity should start swipe back.
+     */
+    public void setFullScreenSwipeEnabled(boolean enabled) {
+        mDragHelper.setFullScreenSwipeEnabled(enabled);
+    }
+
+    /**
      * Register a callback to be invoked when a swipe event is sent to this
      * view.
      *
