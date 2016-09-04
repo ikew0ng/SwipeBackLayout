@@ -7,9 +7,11 @@
     <string name="finish_activity">Finish Activity</string>
 
     <string name="key_tracking_mode">key_tracking_mode</string>
+    <string name="key_full_screen">key_full_screen</string>
     <string name="tracking_mode_left">Left</string>
     <string name="tracking_mode_right">Right</string>
     <string name="tracking_mode_bottom">Bottom</string>
     <string name="tracking_mode_all">All</string>
+    <string name="full_screen_drag">Enable full screen dragging</string>
 
 </resources>
