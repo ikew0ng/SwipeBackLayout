@@ -80,6 +80,7 @@ compile 'me.imid.swipebacklayout.lib:library:1.0.0'
 ```
 
 Download the **lastest** library from github:
+
 1. Download file [SwipeBackLayout-V1.1.0.arr](https://github.com/luffykou/SwipeBackLayout/blob/master/SwipeBackLayout-V1.1.0.aar), and put it under yourAppName/libs/
 2. Add some config to your build.gradle:
 ```
