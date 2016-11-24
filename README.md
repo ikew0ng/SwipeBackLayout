@@ -92,7 +92,7 @@ repositories {
 dependencies {
     ...
     //compile 'me.imid.swipebacklayout.lib:library:1.0.0'
-    compile(name: 'SwipeBackLayout-V1.10', ext: 'aar')
+    compile(name: 'SwipeBackLayout-V1.1.0', ext: 'aar')
 }
 ```
 
