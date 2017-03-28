@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -460,11 +465,40 @@ public class SwipeBackLayout extends FrameLayout {
 
         ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
         ViewGroup decorChild = (ViewGroup) decor.getChildAt(0);
-        decorChild.setBackgroundResource(background);
+        Drawable d = decorChild.getBackground();
+        // no background or background is TRANSPARENT,use 'windowBackground' to background
+        if (d == null || (d instanceof ColorDrawable && isTransparent((ColorDrawable) d))) {
+            decorChild.setBackgroundResource(background);
+        }
         decor.removeView(decorChild);
         addView(decorChild);
         setContentView(decorChild);
         decor.addView(this);
+    }
+
+    private boolean isTransparent(ColorDrawable drawable) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return drawable.getColor() == Color.TRANSPARENT;
+        } else {
+            try {
+                int color = 0;
+                final Field stateField = drawable.getClass().getDeclaredField("mState");
+                stateField.setAccessible(true);
+                final Object state = stateField.get(drawable);
+
+                final Field useColorField = state.getClass().getDeclaredField("mUseColor");
+                useColorField.setAccessible(true);
+                useColorField.setInt(state, color);
+
+                final Field baseColorField = state.getClass().getDeclaredField(
+                        "mBaseColor");
+                baseColorField.setAccessible(true);
+                baseColorField.setInt(state, color);
+                return color == Color.TRANSPARENT;
+            } catch (Exception e) {
+                return false;
+            }
+        }
     }
 
     @Override
@@ -549,7 +583,7 @@ public class SwipeBackLayout extends FrameLayout {
             if (mScrollPercent >= 1) {
                 if (!mActivity.isFinishing()) {
                     mActivity.finish();
-                    mActivity.overridePendingTransition(0, 0);        
+                    mActivity.overridePendingTransition(0, 0);
                 }
             }
         }
