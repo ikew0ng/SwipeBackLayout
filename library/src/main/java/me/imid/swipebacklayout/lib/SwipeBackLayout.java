@@ -473,7 +473,7 @@ public class SwipeBackLayout extends FrameLayout {
         decor.removeView(decorChild);
         addView(decorChild);
         setContentView(decorChild);
-        decor.addView(this);
+        decor.addView(this,0);
     }
 
     private boolean isTransparent(ColorDrawable drawable) {
