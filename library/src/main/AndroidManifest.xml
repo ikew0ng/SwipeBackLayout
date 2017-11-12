@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="me.imid.swipebacklayout.lib"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="me.imid.swipebacklayout.lib"
           android:versionCode="1"
-          android:versionName="1.0">
-
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="14"/>
+          android:versionName="1.0"
+    tools:ignore="GradleOverrides"
+    >
 
     <application/>
 

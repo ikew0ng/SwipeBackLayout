@@ -1,21 +1,12 @@
 apply plugin: 'com.android.application'
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile project(':library')
-}
-
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        minSdkVersion 7
-        targetSdkVersion 22
+        minSdkVersion 14
+        targetSdkVersion 26
     }
 
     signingConfigs {
@@ -29,6 +20,11 @@ android {
             }
         }
     }
+}
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation project(':library')
 }
 
 if (project.hasProperty('storeFile')) {
