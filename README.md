@@ -76,7 +76,7 @@ Download
 ===
 Download via Jcenter:
 ```
-compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+compile 'me.imid.swipebacklayout.lib:library:1.1.0'
 ```
 
 
@@ -87,7 +87,7 @@ I will gladly accept pull requests for fixes and feature enhancements but please
 License
 ===
 
-   Copyright 2013 Issac Wong
+   Copyright 2013 Isaac Wang
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

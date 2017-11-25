@@ -31,6 +31,9 @@ proguard.cfg
 
 #gradle
 .gradle
+library/gradle/
+library/gradlew
+library/gradlew.bat
 
 #keystore
 keystore

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 26
@@ -16,7 +18,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
 }
 
-/*
+version="1.1.0"
 def siteUrl = 'https://github.com/ikew0ng/SwipeBackLayout'
 def gitUrl = 'https://github.com/ikew0ng/SwipeBackLayout.git'
 group = "me.imid.swipebacklayout.lib"
@@ -55,16 +57,7 @@ task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
 artifacts {
-    archives javadocJar
     archives sourcesJar
 }
 Properties properties = new Properties()
@@ -84,4 +77,4 @@ bintray {
         licenses = ["Apache-2.0"]
         publish = true
     }
-}*/
+}
