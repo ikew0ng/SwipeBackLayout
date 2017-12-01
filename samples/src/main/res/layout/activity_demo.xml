@@ -73,6 +73,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/tracking_mode_all"/>
             </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/full_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/full_screen_drag"/>
         </LinearLayout>
     </ScrollView>
 

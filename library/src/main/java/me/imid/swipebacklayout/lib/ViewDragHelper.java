@@ -152,6 +152,8 @@ public class ViewDragHelper {
 
     private final ViewGroup mParentView;
 
+    private boolean mFullScreenSwipe = false;
+
     /**
      * A Callback is used as a communication channel with the ViewDragHelper
      * back to the parent view using it. <code>on*</code>methods are invoked on
@@ -526,6 +528,25 @@ public class ViewDragHelper {
      */
     public void setEdgeSize(int size) {
         mEdgeSize = size;
+    }
+
+    /**
+     * Return whether swiping anywhere within activity will start the swipe back gesture instead of
+     * only from the edges.
+     *
+     * @return Whether full screen dragging is enabled
+     */
+    public boolean isFullScreenSwipeEnabled() {
+        return mFullScreenSwipe;
+    }
+
+    /**
+     * Set whether swiping anywhere within the activity should start the swipe back gesture.
+     *
+     * @param enabled Whether full screen dragging should be enabled
+     */
+    public void setFullScreenSwipeEnabled(boolean enabled) {
+        mFullScreenSwipe = enabled;
     }
 
     /**
@@ -1344,7 +1365,21 @@ public class ViewDragHelper {
             mEdgeDragsLocked[pointerId] |= edge;
             return false;
         }
-        return (mEdgeDragsInProgress[pointerId] & edge) == 0 && absDelta > mTouchSlop;
+        switch (edge) {
+            case EDGE_LEFT:
+                if (delta <= 0f || absDelta <= mTouchSlop) return false;
+                break;
+            case EDGE_TOP:
+                if (odelta <= 0f || absODelta <= mTouchSlop) return false;
+                break;
+            case EDGE_RIGHT:
+                if (delta >= 0f || absDelta <= mTouchSlop) return false;
+                break;
+            case EDGE_BOTTOM:
+                if (odelta >= 0f || absODelta <= mTouchSlop) return false;
+                break;
+        }
+        return (mEdgeDragsInProgress[pointerId] & edge) == 0;
     }
 
     /**
@@ -1440,20 +1475,19 @@ public class ViewDragHelper {
     }
 
     /**
-     * Check if any of the edges specified were initially touched in the
-     * currently active gesture. If there is no currently active gesture this
-     * method will return false.
+     * Check if there is a drag in progress for any of the specified edges.
+     * If there is no currently active gesture or if this method will return
+     * false.
      *
-     * @param edges Edges to check for an initial edge touch. See
+     * @param edges Edges to check for a drag gesture in progress. See
      *              {@link #EDGE_LEFT}, {@link #EDGE_TOP}, {@link #EDGE_RIGHT},
      *              {@link #EDGE_BOTTOM} and {@link #EDGE_ALL}
-     * @return true if any of the edges specified were initially touched in the
-     * current gesture
+     * @return true if there is a drag in progress for any of the specified edges.
      */
-    public boolean isEdgeTouched(int edges) {
+    public boolean isEdgeDragInProgress(int edges) {
         final int count = mInitialEdgeTouched.length;
         for (int i = 0; i < count; i++) {
-            if (isEdgeTouched(edges, i)) {
+            if (isEdgeDragInProgress(edges, i)) {
                 return true;
             }
         }
@@ -1461,19 +1495,18 @@ public class ViewDragHelper {
     }
 
     /**
-     * Check if any of the edges specified were initially touched by the pointer
-     * with the specified ID. If there is no currently active gesture or if
+     * Check if there is a drag in progress by the pointer with the specified ID
+     * for any of the specified edges. If there is no currently active gesture or if
      * there is no pointer with the given ID currently down this method will
      * return false.
      *
-     * @param edges Edges to check for an initial edge touch. See
+     * @param edges Edges to check for a drag gesture in progress. See
      *              {@link #EDGE_LEFT}, {@link #EDGE_TOP}, {@link #EDGE_RIGHT},
      *              {@link #EDGE_BOTTOM} and {@link #EDGE_ALL}
-     * @return true if any of the edges specified were initially touched in the
-     * current gesture
+     * @return true if there is a drag in progress for any of the specified edges.
      */
-    public boolean isEdgeTouched(int edges, int pointerId) {
-        return isPointerDown(pointerId) && (mInitialEdgeTouched[pointerId] & edges) != 0;
+    public boolean isEdgeDragInProgress(int edges, int pointerId) {
+        return isPointerDown(pointerId) && (mEdgeDragsInProgress[pointerId] & edges) != 0;
     }
 
     private void releaseViewForPointerUp() {
@@ -1566,14 +1599,18 @@ public class ViewDragHelper {
     private int getEdgeTouched(int x, int y) {
         int result = 0;
 
-        if (x < mParentView.getLeft() + mEdgeSize)
-            result = EDGE_LEFT;
-        if (y < mParentView.getTop() + mEdgeSize)
-            result = EDGE_TOP;
-        if (x > mParentView.getRight() - mEdgeSize)
-            result = EDGE_RIGHT;
-        if (y > mParentView.getBottom() - mEdgeSize)
-            result = EDGE_BOTTOM;
+        if (mFullScreenSwipe) {
+            result = mTrackingEdges;
+        } else {
+            if (x < mParentView.getLeft() + mEdgeSize)
+                result = EDGE_LEFT;
+            if (y < mParentView.getTop() + mEdgeSize)
+                result = EDGE_TOP;
+            if (x > mParentView.getRight() - mEdgeSize)
+                result = EDGE_RIGHT;
+            if (y > mParentView.getBottom() - mEdgeSize)
+                result = EDGE_BOTTOM;
+        }
 
         return result;
     }

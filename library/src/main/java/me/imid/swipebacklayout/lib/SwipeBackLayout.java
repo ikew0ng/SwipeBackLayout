@@ -224,6 +224,19 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     /**
+     * Set whether the swipe back gesture should be possible when dragging from anywhere within
+     * the activity instead of only from the edges.
+     *
+     * This changes the meaning of {@link #setEdgeTrackingEnabled(int)} to describe in which
+     * directions drag gesture should be possible.
+     *
+     * @param enabled Whether dragging from anywhere within the activity should start swipe back.
+     */
+    public void setFullScreenSwipeEnabled(boolean enabled) {
+        mDragHelper.setFullScreenSwipeEnabled(enabled);
+    }
+
+    /**
      * Register a callback to be invoked when a swipe event is sent to this
      * view.
      *
@@ -480,13 +493,13 @@ public class SwipeBackLayout extends FrameLayout {
 
         @Override
         public boolean tryCaptureView(View view, int i) {
-            boolean ret = mDragHelper.isEdgeTouched(mEdgeFlag, i);
+            boolean ret = mDragHelper.isEdgeDragInProgress(mEdgeFlag, i);
             if (ret) {
-                if (mDragHelper.isEdgeTouched(EDGE_LEFT, i)) {
+                if (mDragHelper.isEdgeDragInProgress(EDGE_LEFT, i)) {
                     mTrackingEdge = EDGE_LEFT;
-                } else if (mDragHelper.isEdgeTouched(EDGE_RIGHT, i)) {
+                } else if (mDragHelper.isEdgeDragInProgress(EDGE_RIGHT, i)) {
                     mTrackingEdge = EDGE_RIGHT;
-                } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
+                } else if (mDragHelper.isEdgeDragInProgress(EDGE_BOTTOM, i)) {
                     mTrackingEdge = EDGE_BOTTOM;
                 }
                 if (mListeners != null && !mListeners.isEmpty()) {
@@ -549,7 +562,7 @@ public class SwipeBackLayout extends FrameLayout {
             if (mScrollPercent >= 1) {
                 if (!mActivity.isFinishing()) {
                     mActivity.finish();
-                    mActivity.overridePendingTransition(0, 0);        
+                    mActivity.overridePendingTransition(0, 0);
                 }
             }
         }

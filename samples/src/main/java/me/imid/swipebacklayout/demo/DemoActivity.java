@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -28,12 +30,15 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
     private static int mBgIndex = 0;
 
     private String mKeyTrackingMode;
+    private String mKeyFullScreen;
 
     private RadioGroup mTrackingModeGroup;
 
     private SwipeBackLayout mSwipeBackLayout;
 
     private Toolbar mToolbar;
+
+    private CheckBox mFullScreenCheckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
         findViews();
         changeActionBarColor();
         mKeyTrackingMode = getString(R.string.key_tracking_mode);
+        mKeyFullScreen = getString(R.string.key_full_screen);
         mSwipeBackLayout = getSwipeBackLayout();
 
         mTrackingModeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -81,12 +87,21 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                 vibrate(VIBRATE_DURATION);
             }
         });
+
+        mFullScreenCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                mSwipeBackLayout.setFullScreenSwipeEnabled(isChecked);
+                saveFullScreenDragMode(isChecked);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         restoreTrackingMode();
+        restoreFullScreenDragMode();
     }
 
     private void saveTrackingMode(int flag) {
@@ -113,6 +128,17 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
         }
     }
 
+    private void saveFullScreenDragMode(boolean enabled) {
+        PreferenceUtils.setPrefBoolean(getApplicationContext(), mKeyFullScreen, enabled);
+    }
+
+    private void restoreFullScreenDragMode() {
+        boolean enabled = PreferenceUtils.getPrefBoolean(getApplicationContext(), mKeyFullScreen,
+                false);
+
+        mFullScreenCheckbox.setChecked(enabled);
+    }
+
     private void changeActionBarColor() {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColors()[mBgIndex]));
         mBgIndex++;
@@ -126,6 +152,7 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
         findViewById(R.id.btn_start).setOnClickListener(this);
         findViewById(R.id.btn_finish).setOnClickListener(this);
         mTrackingModeGroup = (RadioGroup) findViewById(R.id.tracking_mode);
+        mFullScreenCheckbox = (CheckBox) findViewById(R.id.full_screen);
     }
 
     private int[] getColors() {
