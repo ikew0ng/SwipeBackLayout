@@ -263,7 +263,7 @@ public class SwipeBackLayout extends FrameLayout {
 
     public static interface SwipeListener {
         /**
-         * Invoke when state change
+         * Invoke when state or scrollPercent changed
          *
          * @param state         flag to describe scroll state
          * @param scrollPercent scroll percent of this view
@@ -544,6 +544,13 @@ public class SwipeBackLayout extends FrameLayout {
             if (mScrollPercent < mScrollThreshold && !mIsScrollOverValid) {
                 mIsScrollOverValid = true;
             }
+
+            if (mListeners != null && !mListeners.isEmpty()) {
+                for (SwipeListener listener : mListeners) {
+                    listener.onScrollStateChange(mDragHelper.getViewDragState(), mScrollPercent);
+                }
+            }
+
             if (mListeners != null && !mListeners.isEmpty()
                     && mDragHelper.getViewDragState() == STATE_DRAGGING
                     && mScrollPercent >= mScrollThreshold && mIsScrollOverValid) {
