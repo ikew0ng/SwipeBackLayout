@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.imid.swipebacklayout.lib.app.SwipeBackListenerActivityAdapter;
+
 public class SwipeBackLayout extends FrameLayout {
     /**
      * Minimum velocity that will be detected as a fling
@@ -174,7 +176,7 @@ public class SwipeBackLayout extends FrameLayout {
      *
      * @param view
      */
-    private void setContentView(View view) {
+    public void setContentView(View view) {
         mContentView = view;
     }
 
@@ -285,6 +287,10 @@ public class SwipeBackLayout extends FrameLayout {
          * Invoke when scroll percent over the threshold for the first time
          */
         public void onScrollOverThreshold();
+    }
+
+    public interface SwipeListenerEx extends SwipeListener {
+        void onContentViewSwipedBack();
     }
 
     /**
@@ -464,6 +470,7 @@ public class SwipeBackLayout extends FrameLayout {
         decor.removeView(decorChild);
         addView(decorChild);
         setContentView(decorChild);
+        addSwipeListener(new SwipeBackListenerActivityAdapter(activity));
         decor.addView(this);
     }
 
@@ -547,9 +554,12 @@ public class SwipeBackLayout extends FrameLayout {
             }
 
             if (mScrollPercent >= 1) {
-                if (!mActivity.isFinishing()) {
-                    mActivity.finish();
-                    mActivity.overridePendingTransition(0, 0);        
+                if (null != mListeners && !mListeners.isEmpty()) {
+                    for (SwipeListener listener : mListeners) {
+                        if (listener instanceof SwipeListenerEx) {
+                            ((SwipeListenerEx) listener).onContentViewSwipedBack();
+                        }
+                    }
                 }
             }
         }
