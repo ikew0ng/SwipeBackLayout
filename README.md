@@ -82,7 +82,8 @@ compile 'me.imid.swipebacklayout.lib:library:1.1.0'
 
 Support
 ===
-![](https://github.com/ikew0ng/SwipeBackLayout/blob/master/art/support.jpeg)
+<img src="https://github.com/ikew0ng/SwipeBackLayout/blob/master/art/support.jpeg" width="300">
+
 
 
 Pull Requests
