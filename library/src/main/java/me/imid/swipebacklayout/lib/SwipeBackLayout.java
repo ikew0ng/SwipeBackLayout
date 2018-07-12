@@ -1,16 +1,22 @@
 package me.imid.swipebacklayout.lib;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -310,7 +316,7 @@ public class SwipeBackLayout extends FrameLayout {
      * Set a drawable used for edge shadow.
      *
      * @param shadow    Drawable to use
-     * @param edgeFlags Combination of edge flags describing the edge to set
+     * @param edgeFlag Combination of edge flags describing the edge to set
      * @see #EDGE_LEFT
      * @see #EDGE_RIGHT
      * @see #EDGE_BOTTOM
@@ -330,7 +336,7 @@ public class SwipeBackLayout extends FrameLayout {
      * Set a drawable used for edge shadow.
      *
      * @param resId     Resource of drawable to use
-     * @param edgeFlags Combination of edge flags describing the edge to set
+     * @param edgeFlag Combination of edge flags describing the edge to set
      * @see #EDGE_LEFT
      * @see #EDGE_RIGHT
      * @see #EDGE_BOTTOM
@@ -389,6 +395,7 @@ public class SwipeBackLayout extends FrameLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mInLayout = true;
         if (mContentView != null)
+            mContentLeft = getLeftPadding(mActivity);
             mContentView.layout(mContentLeft, mContentTop,
                     mContentLeft + mContentView.getMeasuredWidth(),
                     mContentTop + mContentView.getMeasuredHeight());
@@ -480,6 +487,62 @@ public class SwipeBackLayout extends FrameLayout {
         if (mDragHelper.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
+    }
+
+    private int getLeftPadding(Context context) {
+
+        // 1. Android Version >= 7.0
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return 0;
+        }
+
+        // 2. Is Mobile Phone
+        if (context.getResources().getConfiguration().smallestScreenWidthDp >= 600) {
+            return 0;
+        }
+
+        // 3. is 270 rotation
+        int screenAngle = getScreenRotationAngle(context);
+        if (screenAngle != Surface.ROTATION_270) {
+            return 0;
+        }
+
+        // 4. get navigation height
+        return getNavigationBarHeight(context);
+    }
+
+    @TargetApi(17)
+    public int getNavigationBarHeight(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (wm == null) {
+            return 0;
+        }
+
+        Display display = wm.getDefaultDisplay();
+
+        Point devicePoint = new Point();
+        display.getRealSize(devicePoint);
+
+        Point appPoint = new Point();
+        display.getSize(appPoint);
+
+        if (appPoint.x < devicePoint.x) { // landscape
+            return devicePoint.x - appPoint.x;
+        } else if (appPoint.y < devicePoint.y) { // portrait
+            return devicePoint.y - appPoint.y;
+        }
+
+        return 0;
+    }
+
+    public int getScreenRotationAngle(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (wm == null) {
+            return Surface.ROTATION_0;
+        }
+
+        Display display = wm.getDefaultDisplay();
+        return display.getRotation();
     }
 
     private class ViewDragCallback extends ViewDragHelper.Callback {
