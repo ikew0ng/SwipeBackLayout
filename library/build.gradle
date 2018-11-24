@@ -3,22 +3,23 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
+        minSdkVersion 16
+        targetSdkVersion 29
         versionCode 2
-        versionName "1.3.0"
+        versionName "1.3.1"
     }
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.fragment:fragment:1.1.0'
 }
 
-version="1.3.0"
+version = "1.3.1"
 def siteUrl = 'https://github.com/ikew0ng/SwipeBackLayout'
 def gitUrl = 'https://github.com/ikew0ng/SwipeBackLayout.git'
 group = "me.imid.swipebacklayout.lib"
@@ -61,7 +62,7 @@ artifacts {
     archives sourcesJar
 }
 Properties properties = new Properties()
-File gradle_properties = project.file('gradle.properties');
+File gradle_properties = project.file('gradle.properties')
 if (gradle_properties.exists()) {
     properties.load(project.file('gradle.properties').newDataInputStream())
 }
