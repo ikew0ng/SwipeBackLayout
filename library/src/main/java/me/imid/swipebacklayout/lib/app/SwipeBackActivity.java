@@ -2,7 +2,6 @@
 package me.imid.swipebacklayout.lib.app;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -22,10 +21,19 @@ public class SwipeBackActivity extends AppCompatActivity implements SwipeBackAct
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mHelper.onPostCreate();
     }
 
-    @Override
+    @Override protected void onStart() {
+      super.onStart();
+      mHelper.onPostCreate();
+    }
+
+    @Override protected void onStop() {
+      super.onStop();
+      mHelper.onStop();
+    }
+
+  @Override
     public View findViewById(int id) {
         View v = super.findViewById(id);
         if (v == null && mHelper != null)

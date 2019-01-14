@@ -33,6 +33,10 @@ public class SwipeBackActivityHelper {
         mSwipeBackLayout.attachToActivity(mActivity);
     }
 
+    public void onStop() {
+        mSwipeBackLayout.detachFromActivity(mActivity);
+    }
+
     public View findViewById(int id) {
         if (mSwipeBackLayout != null) {
             return mSwipeBackLayout.findViewById(id);
