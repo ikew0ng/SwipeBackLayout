@@ -474,6 +474,15 @@ public class SwipeBackLayout extends FrameLayout {
         decor.addView(this);
     }
 
+    public void detachFromActivity(Activity activity) {
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        decorView.removeView(this);
+        View decorChild = getChildAt(0);
+        removeView(decorChild);
+        decorView.addView(decorChild,0);
+        setContentView(decorChild);
+    }
+
     @Override
     public void computeScroll() {
         mScrimOpacity = 1 - mScrollPercent;
