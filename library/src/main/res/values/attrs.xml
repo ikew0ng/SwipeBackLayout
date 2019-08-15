@@ -11,6 +11,7 @@
         <attr name="shadow_left" format="reference"/>
         <attr name="shadow_right" format="reference"/>
         <attr name="shadow_bottom" format="reference"/>
+        <attr name="shadow_top" format="reference"/>
     </declare-styleable>
 
     <attr name="SwipeBackLayoutStyle" format="reference"/>

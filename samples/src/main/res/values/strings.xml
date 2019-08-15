@@ -10,6 +10,9 @@
     <string name="tracking_mode_left">Left</string>
     <string name="tracking_mode_right">Right</string>
     <string name="tracking_mode_bottom">Bottom</string>
+    <string name="tracking_mode_top">Top</string>
+    <string name="tracking_mode_horizontal">Horizontal</string>
+    <string name="tracking_mode_vertical">Vertical</string>
     <string name="tracking_mode_all">All</string>
 
 </resources>

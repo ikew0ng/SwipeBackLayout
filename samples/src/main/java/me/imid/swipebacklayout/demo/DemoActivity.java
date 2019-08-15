@@ -58,6 +58,15 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                     case R.id.mode_bottom:
                         edgeFlag = SwipeBackLayout.EDGE_BOTTOM;
                         break;
+                    case R.id.mode_top:
+                        edgeFlag = SwipeBackLayout.EDGE_TOP;
+                        break;
+                    case R.id.mode_horizontal:
+                        edgeFlag = SwipeBackLayout.EDGE_HORIZONTAL;
+                        break;
+                    case R.id.mode_vertical:
+                        edgeFlag = SwipeBackLayout.EDGE_VERTICAL;
+                        break;
                     default:
                         edgeFlag = SwipeBackLayout.EDGE_ALL;
                 }
@@ -106,6 +115,15 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                 break;
             case SwipeBackLayout.EDGE_BOTTOM:
                 mTrackingModeGroup.check(R.id.mode_bottom);
+                break;
+            case SwipeBackLayout.EDGE_TOP:
+                mTrackingModeGroup.check(R.id.mode_top);
+                break;
+            case SwipeBackLayout.EDGE_HORIZONTAL:
+                mTrackingModeGroup.check(R.id.mode_horizontal);
+                break;
+            case SwipeBackLayout.EDGE_VERTICAL:
+                mTrackingModeGroup.check(R.id.mode_vertical);
                 break;
             case SwipeBackLayout.EDGE_ALL:
                 mTrackingModeGroup.check(R.id.mode_all);
