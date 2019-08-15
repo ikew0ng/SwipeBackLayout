@@ -62,6 +62,15 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                     case R.id.mode_bottom:
                         edgeFlag = SwipeBackLayout.EDGE_BOTTOM;
                         break;
+		    case R.id.mode_top:
+                        edgeFlag = SwipeBackLayout.EDGE_TOP;
+                        break;
+                    case R.id.mode_horizontal:
+                        edgeFlag = SwipeBackLayout.EDGE_HORIZONTAL;
+                        break;
+                    case R.id.mode_vertical:
+                        edgeFlag = SwipeBackLayout.EDGE_VERTICAL;
+                        break;
                     default:
                         edgeFlag = SwipeBackLayout.EDGE_ALL;
                 }
