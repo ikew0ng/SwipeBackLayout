@@ -6,6 +6,7 @@
         <item name="shadow_left">@drawable/shadow_left</item>
         <item name="shadow_right">@drawable/shadow_right</item>
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
+        <item name="shadow_top">@drawable/shadow_top</item>
     </style>
 
 </resources>

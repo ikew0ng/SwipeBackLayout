@@ -44,9 +44,25 @@ public class SwipeBackLayout extends FrameLayout {
     public static final int EDGE_BOTTOM = ViewDragHelper.EDGE_BOTTOM;
 
     /**
+     * Edge flag indicating that the top edge should be affected.
+     */
+    public static final int EDGE_TOP = ViewDragHelper.EDGE_TOP;
+
+
+    /**
      * Edge flag set indicating all edges should be affected.
      */
-    public static final int EDGE_ALL = EDGE_LEFT | EDGE_RIGHT | EDGE_BOTTOM;
+    public static final int EDGE_ALL = EDGE_LEFT | EDGE_RIGHT | EDGE_BOTTOM | EDGE_TOP;
+
+    /**
+     * Edge flag set indicating all edges horizontal should be affected.
+     */
+    public static final int EDGE_HORIZONTAL = EDGE_LEFT | EDGE_RIGHT;
+
+    /**
+     * Edge flag set indicating all edges vertical should be affected.
+     */
+    public static final int EDGE_VERTICAL = EDGE_BOTTOM | EDGE_TOP;
 
     /**
      * A view is not currently being dragged or animating as a result of a
@@ -74,7 +90,7 @@ public class SwipeBackLayout extends FrameLayout {
     private static final int OVERSCROLL_DISTANCE = 10;
 
     private static final int[] EDGE_FLAGS = {
-            EDGE_LEFT, EDGE_RIGHT, EDGE_BOTTOM, EDGE_ALL
+            EDGE_LEFT, EDGE_RIGHT, EDGE_BOTTOM, EDGE_TOP, EDGE_HORIZONTAL, EDGE_VERTICAL, EDGE_ALL
     };
 
     private int mEdgeFlag;
@@ -109,6 +125,8 @@ public class SwipeBackLayout extends FrameLayout {
     private Drawable mShadowRight;
 
     private Drawable mShadowBottom;
+
+    private Drawable mShadowTop;
 
     private float mScrimOpacity;
 
@@ -150,9 +168,12 @@ public class SwipeBackLayout extends FrameLayout {
                 R.drawable.shadow_right);
         int shadowBottom = a.getResourceId(R.styleable.SwipeBackLayout_shadow_bottom,
                 R.drawable.shadow_bottom);
+        int shadowTop = a.getResourceId(R.styleable.SwipeBackLayout_shadow_top,
+                R.drawable.shadow_top);
         setShadow(shadowLeft, EDGE_LEFT);
         setShadow(shadowRight, EDGE_RIGHT);
         setShadow(shadowBottom, EDGE_BOTTOM);
+        setShadow(shadowTop, EDGE_TOP);
         a.recycle();
         final float density = getResources().getDisplayMetrics().density;
         final float minVel = MIN_FLING_VELOCITY * density;
@@ -197,6 +218,7 @@ public class SwipeBackLayout extends FrameLayout {
      * @see #EDGE_LEFT
      * @see #EDGE_RIGHT
      * @see #EDGE_BOTTOM
+     * @see #EDGE_TOP
      */
     public void setEdgeTrackingEnabled(int edgeFlags) {
         mEdgeFlag = edgeFlags;
@@ -280,6 +302,7 @@ public class SwipeBackLayout extends FrameLayout {
          * @see #EDGE_LEFT
          * @see #EDGE_RIGHT
          * @see #EDGE_BOTTOM
+         * @see #EDGE_TOP
          */
         public void onEdgeTouch(int edgeFlag);
 
@@ -314,6 +337,7 @@ public class SwipeBackLayout extends FrameLayout {
      * @see #EDGE_LEFT
      * @see #EDGE_RIGHT
      * @see #EDGE_BOTTOM
+     * @see #EDGE_TOP
      */
     public void setShadow(Drawable shadow, int edgeFlag) {
         if ((edgeFlag & EDGE_LEFT) != 0) {
@@ -322,6 +346,8 @@ public class SwipeBackLayout extends FrameLayout {
             mShadowRight = shadow;
         } else if ((edgeFlag & EDGE_BOTTOM) != 0) {
             mShadowBottom = shadow;
+        } else if ((edgeFlag & EDGE_TOP) != 0) {
+            mShadowTop = shadow;
         }
         invalidate();
     }
@@ -334,6 +360,7 @@ public class SwipeBackLayout extends FrameLayout {
      * @see #EDGE_LEFT
      * @see #EDGE_RIGHT
      * @see #EDGE_BOTTOM
+     * @see #EDGE_TOP
      */
     public void setShadow(int resId, int edgeFlag) {
         setShadow(getResources().getDrawable(resId), edgeFlag);
@@ -356,6 +383,9 @@ public class SwipeBackLayout extends FrameLayout {
         } else if ((mEdgeFlag & EDGE_BOTTOM) != 0) {
             top = -childHeight - mShadowBottom.getIntrinsicHeight() - OVERSCROLL_DISTANCE;
             mTrackingEdge = EDGE_BOTTOM;
+        } else if ((mEdgeFlag & EDGE_TOP) != 0) {
+            top = childHeight + mShadowTop.getIntrinsicHeight() + OVERSCROLL_DISTANCE;
+            mTrackingEdge = EDGE_TOP;
         }
 
         mDragHelper.smoothSlideViewTo(mContentView, left, top);
@@ -415,6 +445,7 @@ public class SwipeBackLayout extends FrameLayout {
         return ret;
     }
 
+    //TODO VERIFY TOP
     private void drawScrim(Canvas canvas, View child) {
         final int baseAlpha = (mScrimColor & 0xff000000) >>> 24;
         final int alpha = (int) (baseAlpha * mScrimOpacity);
@@ -426,6 +457,8 @@ public class SwipeBackLayout extends FrameLayout {
             canvas.clipRect(child.getRight(), 0, getRight(), getHeight());
         } else if ((mTrackingEdge & EDGE_BOTTOM) != 0) {
             canvas.clipRect(child.getLeft(), child.getBottom(), getRight(), getHeight());
+        }else if ((mTrackingEdge & EDGE_TOP) != 0) {
+            canvas.clipRect(0, child.getTop(), child.getLeft(), getHeight());
         }
         canvas.drawColor(color);
     }
@@ -435,24 +468,26 @@ public class SwipeBackLayout extends FrameLayout {
         child.getHitRect(childRect);
 
         if ((mEdgeFlag & EDGE_LEFT) != 0) {
-            mShadowLeft.setBounds(childRect.left - mShadowLeft.getIntrinsicWidth(), childRect.top,
-                    childRect.left, childRect.bottom);
+            mShadowLeft.setBounds(childRect.left - mShadowLeft.getIntrinsicWidth(), childRect.top, childRect.left, childRect.bottom);
             mShadowLeft.setAlpha((int) (mScrimOpacity * FULL_ALPHA));
             mShadowLeft.draw(canvas);
         }
 
         if ((mEdgeFlag & EDGE_RIGHT) != 0) {
-            mShadowRight.setBounds(childRect.right, childRect.top,
-                    childRect.right + mShadowRight.getIntrinsicWidth(), childRect.bottom);
+            mShadowRight.setBounds(childRect.right, childRect.top, childRect.right + mShadowRight.getIntrinsicWidth(), childRect.bottom);
             mShadowRight.setAlpha((int) (mScrimOpacity * FULL_ALPHA));
             mShadowRight.draw(canvas);
         }
 
         if ((mEdgeFlag & EDGE_BOTTOM) != 0) {
-            mShadowBottom.setBounds(childRect.left, childRect.bottom, childRect.right,
-                    childRect.bottom + mShadowBottom.getIntrinsicHeight());
+            mShadowBottom.setBounds(childRect.left, childRect.bottom, childRect.right, childRect.bottom + mShadowBottom.getIntrinsicHeight());
             mShadowBottom.setAlpha((int) (mScrimOpacity * FULL_ALPHA));
             mShadowBottom.draw(canvas);
+        }
+        if ((mEdgeFlag & EDGE_TOP) != 0) {
+            mShadowTop.setBounds(childRect.left, mShadowTop.getIntrinsicHeight() - childRect.top, childRect.right, childRect.top);
+            mShadowTop.setAlpha((int) (mScrimOpacity * FULL_ALPHA));
+            mShadowTop.draw(canvas);
         }
     }
 
@@ -495,6 +530,8 @@ public class SwipeBackLayout extends FrameLayout {
                     mTrackingEdge = EDGE_RIGHT;
                 } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
                     mTrackingEdge = EDGE_BOTTOM;
+                }else if (mDragHelper.isEdgeTouched(EDGE_TOP, i)) {
+                    mTrackingEdge = EDGE_TOP;
                 }
                 if (mListeners != null && !mListeners.isEmpty()) {
                     for (SwipeListener listener : mListeners) {
@@ -506,9 +543,12 @@ public class SwipeBackLayout extends FrameLayout {
             boolean directionCheck = false;
             if (mEdgeFlag == EDGE_LEFT || mEdgeFlag == EDGE_RIGHT) {
                 directionCheck = !mDragHelper.checkTouchSlop(ViewDragHelper.DIRECTION_VERTICAL, i);
-            } else if (mEdgeFlag == EDGE_BOTTOM) {
-                directionCheck = !mDragHelper
-                        .checkTouchSlop(ViewDragHelper.DIRECTION_HORIZONTAL, i);
+            } else if (mEdgeFlag == EDGE_BOTTOM || mEdgeFlag == EDGE_TOP ) {
+                directionCheck = !mDragHelper.checkTouchSlop(ViewDragHelper.DIRECTION_HORIZONTAL, i);
+            } else if (mEdgeFlag == EDGE_HORIZONTAL) {
+                directionCheck = mDragHelper.checkTouchSlop(ViewDragHelper.DIRECTION_HORIZONTAL, i);
+            } else if (mEdgeFlag == EDGE_VERTICAL) {
+                directionCheck = !mDragHelper.checkTouchSlop(ViewDragHelper.DIRECTION_VERTICAL, i);
             } else if (mEdgeFlag == EDGE_ALL) {
                 directionCheck = true;
             }
@@ -522,7 +562,7 @@ public class SwipeBackLayout extends FrameLayout {
 
         @Override
         public int getViewVerticalDragRange(View child) {
-            return mEdgeFlag & EDGE_BOTTOM;
+            return mEdgeFlag & (EDGE_BOTTOM | EDGE_TOP);
         }
 
         @Override
@@ -537,6 +577,9 @@ public class SwipeBackLayout extends FrameLayout {
             } else if ((mTrackingEdge & EDGE_BOTTOM) != 0) {
                 mScrollPercent = Math.abs((float) top
                         / (mContentView.getHeight() + mShadowBottom.getIntrinsicHeight()));
+            } else if ((mTrackingEdge & EDGE_TOP) != 0) {
+                mScrollPercent = Math.abs((float) top
+                        / (mContentView.getHeight() + mShadowTop.getIntrinsicHeight()));
             }
             mContentLeft = left;
             mContentTop = top;
@@ -586,6 +629,9 @@ public class SwipeBackLayout extends FrameLayout {
             } else if ((mTrackingEdge & EDGE_BOTTOM) != 0) {
                 top = yvel < 0 || yvel == 0 && mScrollPercent > mScrollThreshold ? -(childHeight
                         + mShadowBottom.getIntrinsicHeight() + OVERSCROLL_DISTANCE) : 0;
+            } else if ((mTrackingEdge & EDGE_TOP) != 0) {
+                top = yvel > 0 || yvel == 0 && mScrollPercent > mScrollThreshold ? (childHeight
+                        + mShadowTop.getIntrinsicHeight() + OVERSCROLL_DISTANCE) : 0;
             }
 
             mDragHelper.settleCapturedViewAt(left, top);
@@ -608,6 +654,8 @@ public class SwipeBackLayout extends FrameLayout {
             int ret = 0;
             if ((mTrackingEdge & EDGE_BOTTOM) != 0) {
                 ret = Math.min(0, Math.max(top, -child.getHeight()));
+            } else if ((mTrackingEdge & EDGE_TOP) != 0) {
+                ret = Math.min(child.getHeight(), Math.max(top, 0));
             }
             return ret;
         }
