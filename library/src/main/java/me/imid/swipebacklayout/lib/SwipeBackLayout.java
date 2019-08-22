@@ -458,7 +458,7 @@ public class SwipeBackLayout extends FrameLayout {
         } else if ((mTrackingEdge & EDGE_BOTTOM) != 0) {
             canvas.clipRect(child.getLeft(), child.getBottom(), getRight(), getHeight());
         }else if ((mTrackingEdge & EDGE_TOP) != 0) {
-            canvas.clipRect(child.getRight(), child.getTop(), child.getLeft(), getHeight());
+            canvas.clipRect(0, child.getTop(), child.getLeft(), getHeight());
         }
         canvas.drawColor(color);
     }
