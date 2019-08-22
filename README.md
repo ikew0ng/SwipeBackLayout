@@ -4,6 +4,7 @@ SwipeBackLayout
 An Android library that help you to build app with swipe back gesture.
 
 
+![](https://github.com/silexcorp/SwipeBackLayout-1/blob/master/art/screnshot2.jpg?raw=true)
 ![](https://github.com/Issacw0ng/SwipeBackLayout/blob/master/art/screenshot.png?raw=true)
 
 
@@ -60,6 +61,15 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                         break;
                     case R.id.mode_bottom:
                         edgeFlag = SwipeBackLayout.EDGE_BOTTOM;
+                        break;
+		    case R.id.mode_top:
+                        edgeFlag = SwipeBackLayout.EDGE_TOP;
+                        break;
+                    case R.id.mode_horizontal:
+                        edgeFlag = SwipeBackLayout.EDGE_HORIZONTAL;
+                        break;
+                    case R.id.mode_vertical:
+                        edgeFlag = SwipeBackLayout.EDGE_VERTICAL;
                         break;
                     default:
                         edgeFlag = SwipeBackLayout.EDGE_ALL;
