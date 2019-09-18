@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 public class SwipeBackPreferenceActivity extends PreferenceActivity implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;
 
@@ -22,6 +24,7 @@ public class SwipeBackPreferenceActivity extends PreferenceActivity implements S
         mHelper.onPostCreate();
     }
 
+    @Nullable
     @Override
     public View findViewById(int id) {
         View v = super.findViewById(id);
@@ -29,7 +32,7 @@ public class SwipeBackPreferenceActivity extends PreferenceActivity implements S
             return mHelper.findViewById(id);
         return v;
     }
-    
+
     @Override
     public SwipeBackLayout getSwipeBackLayout() {
         return mHelper.getSwipeBackLayout();

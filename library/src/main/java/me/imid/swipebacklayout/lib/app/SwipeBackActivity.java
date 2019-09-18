@@ -3,6 +3,7 @@ package me.imid.swipebacklayout.lib.app;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
@@ -25,6 +26,7 @@ public class SwipeBackActivity extends AppCompatActivity implements SwipeBackAct
         mHelper.onPostCreate();
     }
 
+    @Nullable
     @Override
     public View findViewById(int id) {
         View v = super.findViewById(id);

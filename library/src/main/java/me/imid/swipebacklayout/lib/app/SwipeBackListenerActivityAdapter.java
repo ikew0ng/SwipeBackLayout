@@ -12,6 +12,7 @@ import me.imid.swipebacklayout.lib.Utils;
  * Created by laysionqet on 2018/4/24.
  */
 public class SwipeBackListenerActivityAdapter implements SwipeBackLayout.SwipeListenerEx {
+    @NonNull
     private final WeakReference<Activity> mActivity;
 
     public SwipeBackListenerActivityAdapter(@NonNull Activity activity) {
