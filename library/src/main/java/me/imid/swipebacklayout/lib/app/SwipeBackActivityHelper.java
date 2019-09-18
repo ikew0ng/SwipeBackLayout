@@ -6,6 +6,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.Utils;
 
@@ -33,6 +35,7 @@ public class SwipeBackActivityHelper {
         mSwipeBackLayout.attachToActivity(mActivity);
     }
 
+    @Nullable
     public View findViewById(int id) {
         if (mSwipeBackLayout != null) {
             return mSwipeBackLayout.findViewById(id);
